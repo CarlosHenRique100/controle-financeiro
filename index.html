@@ -75,6 +75,8 @@ import { getFirestore, collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot
 import { firebaseConfig } from "./firebase-config.js"; 
 import { iniciarCalendario } from "./calendario.js";
 import { iniciarVencimentos } from "./vencimentos.js";
+import { iniciarListaMobile } from "./lista_mobile.js";
+iniciarListaMobile();
 iniciarVencimentos();
 const app=initializeApp(firebaseConfig), auth=getAuth(app), db=getFirestore(app);
 let data=[], current=new Date(new Date().getFullYear(),new Date().getMonth(),1), editId=null, categoryChart=null, monthlyChart=null, user=null, unsubscribe=null, ready=false;

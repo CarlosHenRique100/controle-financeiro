@@ -98,6 +98,14 @@ function render(){
  incomeTrend.textContent=`${data.filter(x=>x.month===mk&&x.type==='Receita').length} lançamento(s)`;
  expenseTrend.textContent=`${data.filter(x=>x.month===mk&&x.type!=='Receita').length} lançamento(s)`;
  paidTrend.textContent=exp?`${Math.round((paid/exp)*100)}% das despesas`:'Nenhuma despesa';
+ const pendenteCentavos = data
+  .filter(x => x.month === mk && x.type !== 'Receita' && x.status !== 'PAGO')
+  .reduce((total, x) => total + Math.round(x.value * 100), 0);
+
+paidTrend.insertAdjacentHTML(
+  'beforeend',
+  '<br>Falta pagar: ' + brl(pendenteCentavos / 100)
+);
  balanceTrend.textContent=income>=exp?'Saldo positivo':'Atenção ao saldo';
  iniciarCalendario({ data, current, brl, escapeHtml });
  if(typeof Chart !== 'undefined') updateCharts(mk);

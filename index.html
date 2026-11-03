@@ -72,7 +72,8 @@ table{width:100%;border-collapse:collapse}th{background:var(--green);color:#fff;
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import { getFirestore, collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot, getDocsFromServer, writeBatch } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-import { firebaseConfig } from "./firebase-config.js";
+import { firebaseConfig } from "./firebase-config.js"; 
+import { iniciarCalendario } from "./calendario.js";
 const app=initializeApp(firebaseConfig), auth=getAuth(app), db=getFirestore(app);
 let data=[], current=new Date(new Date().getFullYear(),new Date().getMonth(),1), editId=null, categoryChart=null, monthlyChart=null, user=null, unsubscribe=null, ready=false;
 const byId=id=>document.getElementById(id);
@@ -96,6 +97,7 @@ function render(){
  expenseTrend.textContent=`${data.filter(x=>x.month===mk&&x.type!=='Receita').length} lançamento(s)`;
  paidTrend.textContent=exp?`${Math.round((paid/exp)*100)}% das despesas`:'Nenhuma despesa';
  balanceTrend.textContent=income>=exp?'Saldo positivo':'Atenção ao saldo';
+ iniciarCalendario({ data, current, brl, escapeHtml });
  if(typeof Chart !== 'undefined') updateCharts(mk);
 }
 

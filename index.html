@@ -91,6 +91,157 @@ table{width:100%;border-collapse:collapse}th{background:var(--green);color:#fff;
   #mainApp .top #addBtn{grid-column:1/-1;width:100%}
 }
 
+
+/* Atualização visual: cores suaves, leitura e controles consistentes. */
+:root{
+  --green:#286653; --green2:#267653; --bg:#f3f6f5;
+  --line:#dbe5e1; --text:#243831; --muted:#61766d;
+  --red:#a8473d; --redbg:#f9e9e6;
+  --blue:#e7f0f5; --purple:#f0eaf4; --yellow:#f9f1df;
+}
+body{background:var(--bg);color:var(--text)}
+#mainApp .cards{gap:12px;margin-bottom:18px}
+#mainApp .card{
+  min-width:0;min-height:106px;padding:16px 18px;
+  border:1px solid var(--line);border-radius:12px;background:#fff;
+  box-shadow:0 2px 8px rgba(35,67,53,.045);
+}
+#mainApp .card .label{margin-bottom:8px;color:var(--muted);font-size:13px;font-weight:700}
+#mainApp .card .value{font-size:clamp(21px,2vw,27px);line-height:1.18;overflow-wrap:anywhere;letter-spacing:-.35px}
+#mainApp .card .trend{margin-top:7px;font-size:12px;line-height:1.45}
+#mainApp .card .income{color:#276b50}
+#mainApp .card .expense{color:#a34b42}
+#mainApp .card .balance{color:#365f78}
+#mainApp .panel,
+#mainApp .chart-card{
+  border:1px solid var(--line);border-radius:14px;
+  box-shadow:0 2px 8px rgba(35,67,53,.045);
+}
+#mainApp .panel-head{padding:18px 20px;border-bottom:1px solid var(--line);gap:14px}
+#mainApp .panel-head h2{font-size:17px;line-height:1.35}
+#mainApp .filter{gap:8px}
+#mainApp .filter input,#mainApp .filter select,
+#mainApp .field input,#mainApp .field select,
+.dialog .field input,.dialog .field select,.auth-panel input{
+  min-height:42px;border:1px solid #d5e0db;border-radius:9px;
+  background:#fff;color:var(--text);padding:9px 11px;
+}
+#mainApp .filter input::placeholder,.dialog .field input::placeholder{color:#7a8c84}
+#mainApp .btn-primary,#mainApp .btn-light,#mainApp .btn-danger,
+.modal .btn-primary,.modal .btn-light,.auth-panel .btn-primary{
+  min-height:42px;border-radius:9px;font-size:14px;line-height:1.25;
+}
+#mainApp .btn-primary,.modal .btn-primary,.auth-panel .btn-primary{background:#286653;color:white}
+#mainApp .btn-light,.modal .btn-light{border-color:#d5e0db;background:#fff;color:#2d4d3f}
+#mainApp .btn-primary:hover,.modal .btn-primary:hover,.auth-panel .btn-primary:hover{background:#215641}
+#mainApp .btn-light:hover,.modal .btn-light:hover{background:#f4f8f6}
+#mainApp button:focus-visible,#mainApp input:focus-visible,#mainApp select:focus-visible,
+.dialog button:focus-visible,.dialog input:focus-visible,.dialog select:focus-visible,
+.auth-panel button:focus-visible,.auth-panel input:focus-visible{
+  outline:3px solid #8abca7;outline-offset:2px;
+}
+#mainApp .table-wrap th{
+  background:#edf4f0;color:#365548;border-right:0;border-bottom:1px solid #dbe5e1;
+  padding:12px 14px;font-size:12px;font-weight:800;
+}
+#mainApp .table-wrap td{padding:13px 14px;line-height:1.4;border-bottom:1px solid #edf1ef}
+#mainApp .table-wrap tbody tr:nth-child(even){background:#fafcfb}
+#mainApp .table-wrap tbody tr:hover{background:#f5faf7}
+#mainApp .table-wrap .pill{padding:5px 10px;font-size:12px;font-weight:700}
+#mainApp .table-wrap .recorrente{display:inline-block;margin-top:5px;padding:3px 7px;background:#f8f2dd;color:#685926}
+#mainApp .table-wrap .value-edit{font-size:15px;min-height:38px}
+#mainApp .table-wrap .status-select{font-size:12px;min-height:36px}
+#mainApp .table-wrap .status-paid{background:#e4f3e9;color:#285e40}
+#mainApp .table-wrap .status-unpaid{background:#faece9;color:#95473f}
+#mainApp .table-wrap .icon-btn{min-width:38px;min-height:38px;background:#f0f5f2;color:#315546}
+#mainApp .table-wrap .icon-btn:hover{background:#e5efe9}
+#mainApp .chart-card{padding:18px;background:#fff}
+#mainApp .chart-title{font-size:14px;color:#385548}
+#alternarGraficos{min-height:42px}
+/* Os módulos do calendário e alertas inserem estilos depois deste arquivo:
+   seletores mais específicos preservam a identidade visual sem alterar o JS. */
+#mainApp #calendarioContas{
+  border-color:var(--line);border-radius:14px;
+  box-shadow:0 2px 8px rgba(35,67,53,.045);
+}
+#mainApp #calendarioContas .calendario-cabecalho{padding:18px 20px;border-bottom:1px solid var(--line)}
+#mainApp #calendarioContas .calendario-cabecalho h2{font-size:17px;line-height:1.35;color:var(--text)}
+#mainApp #calendarioContas .calendario-cabecalho p{font-size:13px;color:var(--muted)}
+#mainApp #calendarioContas .calendario-conteudo{padding:16px 20px 20px}
+#mainApp #calendarioContas .calendario-semana{font-size:12px;color:#647970}
+#mainApp #calendarioContas .calendario-dia{
+  background:#fbfcfb;border:1px solid #e3ebe7;border-radius:9px;
+  color:var(--text);line-height:1.2;box-shadow:none;
+}
+#mainApp #calendarioContas .calendario-dia:hover{background:#f1f7f3;border-color:#8abca5}
+#mainApp #calendarioContas .calendario-dia.selecionado{background:#edf7f1;border:2px solid #397b5c}
+#mainApp #calendarioContas .calendario-dia.hoje{border-color:#71aa8c;background:#f2f8f4}
+#mainApp #calendarioContas .calendario-dia.hoje.selecionado{border:2px solid #397b5c}
+#mainApp #calendarioContas .calendario-dia.hoje .calendario-numero{
+  background:#286653;color:#fff;text-decoration:none;border-radius:50%;
+  min-width:23px;min-height:23px;display:inline-flex;justify-content:center;align-items:center;
+}
+#mainApp #calendarioContas .calendario-dia.aviso-dia-vencida{box-shadow:inset 0 0 0 1px #d9a19a}
+#mainApp #calendarioContas .calendario-dia.aviso-dia-hoje{box-shadow:inset 0 0 0 1px #d8b975}
+#mainApp #calendarioContas .calendario-dia.aviso-dia-proxima{box-shadow:inset 0 0 0 1px #e0ca91}
+#mainApp #calendarioContas .calendario-valor{color:#904b41}
+#mainApp #calendarioContas .calendario-qtd{color:var(--muted)}
+#mainApp #calendarioContas .calendario-dia .aviso-vencimento{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+#mainApp .aviso-vencida{background:#f8e9e6;color:#963d35}
+#mainApp .aviso-hoje{background:#fbf0d8;color:#745000}
+#mainApp .aviso-proxima{background:#f9f3df;color:#705a1b}
+#mainApp #calendarioContas .calendario-detalhes{border-color:var(--line)}
+#mainApp #calendarioContas .calendario-lista .calendario-item-valor{color:#904b41}
+.dialog{max-height:calc(100dvh - 32px);overflow:auto;box-shadow:0 18px 48px rgba(25,52,39,.18)}
+.dialog h2{font-size:20px;color:var(--text)}
+.dialog .field label{color:#455f53}
+.modal{z-index:20}
+@media(max-width:900px){
+  #mainApp .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #mainApp .panel-head{align-items:stretch}
+}
+@media(max-width:700px){
+  #mainApp .table-wrap{padding:12px}
+  #mainApp #rows tr{border-color:#e2eae6;border-radius:11px;box-shadow:0 2px 6px rgba(35,67,53,.035)}
+  #mainApp #rows tr td{line-height:1.35}
+  #mainApp #rows tr .mobile-detalhes-btn{color:#286653}
+}
+@media(max-width:520px){
+  #mainApp .cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  #mainApp .card{min-height:98px;padding:12px}
+  #mainApp .card .label{font-size:12px}
+  #mainApp .card .value{font-size:clamp(17px,5vw,22px)}
+  #mainApp .card .trend{font-size:11px}
+  #mainApp .panel-head{padding:16px}
+  #mainApp #calendarioContas .calendario-cabecalho{padding:16px}
+  #mainApp #calendarioContas .calendario-conteudo{padding:12px}
+  #mainApp #calendarioContas .calendario-dia{padding:4px;gap:3px}
+  #mainApp #calendarioContas .calendario-dia.hoje .calendario-numero{min-width:20px;min-height:20px}
+  #mainApp #calendarioContas .calendario-dia .aviso-vencimento{font-size:9px;padding:1px 2px;line-height:1.1}
+}
+@media(max-width:360px){
+  #mainApp .card .value{font-size:17px}
+}
+
+
+@media(max-width:520px){
+  #mainApp #calendarioContas .calendario-conteudo{padding:12px 8px}
+  #mainApp #calendarioContas .calendario-grade,
+  #mainApp #calendarioContas .calendario-semana{gap:3px}
+  #mainApp #calendarioContas .calendario-dia{padding:3px;gap:3px}
+  #mainApp #calendarioContas .calendario-valor{
+    font-size:10px;line-height:1.15;letter-spacing:-.35px;
+    overflow-wrap:normal;word-break:normal;white-space:normal;
+  }
+}
+
+
+@media(max-width:520px){
+  #mainApp #calendarioContas .calendario-valor{
+    overflow-wrap:anywhere;white-space:normal;letter-spacing:normal;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -189,7 +340,7 @@ function updateCharts(mk){
  const monthItems=data.filter(x=>x.month===mk && x.type!=='Receita');
  const categoryTotals={};
  monthItems.forEach(x=>{categoryTotals[x.type]=(categoryTotals[x.type]||0)+x.value});
- const colors=['#286653','#d92c20','#8d5ab8','#e0ad24','#2f78b7','#7d8b95'];
+ const colors=['#578b73','#c78476','#9182a2','#d1b77d','#7d9dab','#a1aaa5'];
  if(categoryChart) categoryChart.destroy();
  categoryChart=new Chart(document.getElementById('categoryChart'),{
    type:'doughnut',
@@ -203,7 +354,7 @@ function updateCharts(mk){
  if(monthlyChart) monthlyChart.destroy();
  monthlyChart=new Chart(document.getElementById('monthlyChart'),{
    type:'bar',
-   data:{labels,datasets:[{label:'Receitas',data:incomeData,backgroundColor:'#0a8d54',borderRadius:5},{label:'Despesas',data:expenseData,backgroundColor:'#d92c20',borderRadius:5}]},
+   data:{labels,datasets:[{label:'Receitas',data:incomeData,backgroundColor:'#719f87',borderRadius:5},{label:'Despesas',data:expenseData,backgroundColor:'#cc9286',borderRadius:5}]},
    options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true,ticks:{callback:v=>'R$ '+Number(v).toLocaleString('pt-BR')}},x:{grid:{display:false}}},plugins:{legend:{position:'bottom'}}}
  });
 }

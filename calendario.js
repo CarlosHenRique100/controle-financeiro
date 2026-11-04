@@ -55,6 +55,9 @@ function criarInterface() {
     .calendario-lista li:last-child{border-bottom:0}
     .calendario-lista strong{overflow-wrap:anywhere}
     .calendario-lista .calendario-item-valor{white-space:nowrap;color:var(--red);font-weight:700}
+    #mainApp #calendarioContas .calendario-receita{color:#267653}
+    #mainApp #calendarioContas .calendario-pago{color:#426b7e}
+    #mainApp #calendarioContas .calendario-pendente{color:#904b41}
     @media(max-width:520px){
       .calendario-cabecalho{padding:16px}.calendario-conteudo{padding:12px}
       .calendario-semana,.calendario-grade{gap:3px}.calendario-semana{font-size:11px}
@@ -71,13 +74,13 @@ function criarInterface() {
   section.setAttribute('aria-labelledby', 'calendarioTitulo');
   section.innerHTML = `
     <div class="calendario-cabecalho">
-      <h2 id="calendarioTitulo">Calendário de contas a pagar</h2>
-      <p>O valor de cada dia é a soma das despesas não pagas com vencimento nessa data. Toque em um dia para ver os detalhes.</p>
+      <h2 id="calendarioTitulo">Calendário de lançamentos</h2>
+      <p>Receitas, despesas pendentes e contas pagas aparecem separadamente. Toque em um dia para ver os detalhes.</p>
     </div>
     <div class="calendario-conteudo">
       <div class="calendario-semana" aria-hidden="true"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div>
       <div id="calendarioGrade" class="calendario-grade"></div>
-      <div id="calendarioDetalhes" class="calendario-detalhes" aria-live="polite"><p>Selecione um dia para ver as contas pendentes.</p></div>
+      <div id="calendarioDetalhes" class="calendario-detalhes" aria-live="polite"><p>Selecione um dia para ver os lançamentos.</p></div>
     </div>`;
   const analytics = document.querySelector('#mainApp .analytics');
   if (!analytics) throw new Error('Não foi possível localizar a área de gráficos para inserir o calendário.');
@@ -103,15 +106,22 @@ function desenhar(contexto) {
     diaSelecionado = null;
   }
 
-  // A tabela existente trata qualquer status diferente de PAGO como não pago.
-  const pendentes = data.filter(item => item.type !== 'Receita' && item.status !== 'PAGO' &&
-    typeof item.date === 'string' && item.date.slice(0, 7) === prefixo);
+  // Cada lançamento aparece uma única vez: receita, despesa paga ou pendente.
+  const itens = data.filter(item => typeof item.date === 'string' &&
+    item.date.slice(0, 7) === prefixo);
   const porDia = new Map();
-  for (const item of pendentes) {
+  for (const item of itens) {
     const lista = porDia.get(item.date) || [];
     lista.push(item);
     porDia.set(item.date, lista);
   }
+  const totalizar = lista => lista.reduce((total, item) =>
+    total + Math.round((Number(item.value) || 0) * 100), 0);
+  const separar = lista => ({
+    receitas: lista.filter(item => item.type === 'Receita'),
+    pagas: lista.filter(item => item.type !== 'Receita' && item.status === 'PAGO'),
+    pendentes: lista.filter(item => item.type !== 'Receita' && item.status !== 'PAGO')
+  });
 
   const primeiroDia = new Date(ano, mes, 1).getDay();
   const quantidadeDias = new Date(ano, mes + 1, 0).getDate();
@@ -121,26 +131,47 @@ function desenhar(contexto) {
   for (let dia = 1; dia <= quantidadeDias; dia++) {
     const chave = `${prefixo}-${String(dia).padStart(2, '0')}`;
     const lista = porDia.get(chave) || [];
-    const totalCentavos = lista.reduce((total, item) => total + Math.round((Number(item.value) || 0) * 100), 0);
-    const total = brl(totalCentavos / 100);
-    const detalhes = lista.length ? `${lista.length} conta(s) pendente(s), ${total}` : 'nenhuma conta pendente';
-    html.push(`<button type="button" class="calendario-dia${chave === diaSelecionado ? ' selecionado' : ''}${chave === hojeTexto ? ' hoje' : ''}" data-dia="${chave}" aria-pressed="${chave === diaSelecionado}" aria-label="Dia ${dia}: ${escapeHtml(detalhes)}"><span class="calendario-numero">${dia}</span>${lista.length ? `<span class="calendario-valor">${escapeHtml(total)}</span><span class="calendario-qtd">${lista.length} conta(s)</span>` : ''}</button>`);
+    const grupos = separar(lista);
+    const resumo = [
+      grupos.receitas.length ? `${grupos.receitas.length} receita(s), ${brl(totalizar(grupos.receitas)/100)}` : '',
+      grupos.pendentes.length ? `${grupos.pendentes.length} despesa(s) pendente(s), ${brl(totalizar(grupos.pendentes)/100)}` : '',
+      grupos.pagas.length ? `${grupos.pagas.length} conta(s) paga(s), ${brl(totalizar(grupos.pagas)/100)}` : ''
+    ].filter(Boolean).join('; ') || 'nenhum lançamento';
+    const valores = [
+      grupos.receitas.length ? `<span class="calendario-valor calendario-receita">+ ${escapeHtml(brl(totalizar(grupos.receitas)/100))}</span>` : '',
+      grupos.pendentes.length ? `<span class="calendario-valor calendario-pendente">− ${escapeHtml(brl(totalizar(grupos.pendentes)/100))}</span>` : '',
+      grupos.pagas.length ? `<span class="calendario-valor calendario-pago">Pago: ${escapeHtml(brl(totalizar(grupos.pagas)/100))}</span>` : ''
+    ].join('');
+    // O marcador de quantidade só existe para pendentes: os alertas de
+    // vencimento não devem ser exibidos para receitas ou contas pagas.
+    const qtd = grupos.pendentes.length ? `<span class="calendario-qtd">${grupos.pendentes.length} pendente(s)</span>` : '';
+    html.push(`<button type="button" class="calendario-dia${chave === diaSelecionado ? ' selecionado' : ''}${chave === hojeTexto ? ' hoje' : ''}" data-dia="${chave}" aria-pressed="${chave === diaSelecionado}" aria-label="Dia ${dia}: ${escapeHtml(resumo)}"><span class="calendario-numero">${dia}</span>${valores}${qtd}</button>`);
   }
   document.getElementById('calendarioGrade').innerHTML = html.join('');
 
   const detalhes = document.getElementById('calendarioDetalhes');
   if (!diaSelecionado) {
-    detalhes.innerHTML = '<p>Selecione um dia para ver as contas pendentes.</p>';
+    detalhes.innerHTML = '<p>Selecione um dia para ver os lançamentos.</p>';
     return;
   }
   const lista = porDia.get(diaSelecionado) || [];
   const dataFormatada = `${diaSelecionado.slice(8, 10)}/${diaSelecionado.slice(5, 7)}/${diaSelecionado.slice(0, 4)}`;
   if (!lista.length) {
-    detalhes.innerHTML = `<h3>Contas de ${dataFormatada}</h3><p>Nenhuma conta pendente neste dia.</p>`;
+    detalhes.innerHTML = `<h3>Lançamentos de ${dataFormatada}</h3><p>Nenhum lançamento neste dia.</p>`;
     return;
   }
-  const totalCentavos = lista.reduce((total, item) => total + Math.round((Number(item.value) || 0) * 100), 0);
-  detalhes.innerHTML = `<h3>Contas de ${dataFormatada} — total: ${escapeHtml(brl(totalCentavos / 100))}</h3><ul class="calendario-lista">${lista.map(item => `<li><span><strong>${escapeHtml(item.desc)}</strong><br><small>${escapeHtml(item.type)} · Não pago</small></span><span class="calendario-item-valor">${escapeHtml(brl(Number(item.value) || 0))}</span></li>`).join('')}</ul>`;
+  const grupos = separar(lista);
+  const resumo = [
+    grupos.receitas.length ? `Receitas: ${escapeHtml(brl(totalizar(grupos.receitas)/100))}` : '',
+    grupos.pendentes.length ? `Pendentes: ${escapeHtml(brl(totalizar(grupos.pendentes)/100))}` : '',
+    grupos.pagas.length ? `Pagas: ${escapeHtml(brl(totalizar(grupos.pagas)/100))}` : ''
+  ].filter(Boolean).join(' · ');
+  detalhes.innerHTML = `<h3>Lançamentos de ${dataFormatada}</h3><p>${resumo}</p><ul class="calendario-lista">${lista.map(item => {
+    const receita = item.type === 'Receita';
+    const situacao = receita ? 'Receita' : item.status === 'PAGO' ? 'Pago' : 'Não pago';
+    const classe = receita ? 'calendario-receita' : item.status === 'PAGO' ? 'calendario-pago' : 'calendario-pendente';
+    return `<li><span><strong>${escapeHtml(item.desc)}</strong><br><small>${escapeHtml(item.type)} · ${situacao}</small></span><span class="calendario-item-valor ${classe}">${receita ? '+ ' : '− '}${escapeHtml(brl(Number(item.value) || 0))}</span></li>`;
+  }).join('')}</ul>`;
 }
 
 export function iniciarCalendario(contexto) {

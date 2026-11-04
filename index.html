@@ -74,10 +74,12 @@ import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from
 import { getFirestore, collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot, getDocsFromServer, writeBatch } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js"; 
 import { iniciarCalendario } from "./calendario.js";
+import { iniciarGraficosRecolhiveis } from "./graficos_recolhiveis.js";
+iniciarGraficosRecolhiveis();
 import { iniciarVencimentos } from "./vencimentos.js";
+iniciarVencimentos();
 import { iniciarListaMobile } from "./lista_mobile.js";
 iniciarListaMobile();
-iniciarVencimentos();
 const app=initializeApp(firebaseConfig), auth=getAuth(app), db=getFirestore(app);
 let data=[], current=new Date(new Date().getFullYear(),new Date().getMonth(),1), editId=null, categoryChart=null, monthlyChart=null, user=null, unsubscribe=null, ready=false;
 const byId=id=>document.getElementById(id);

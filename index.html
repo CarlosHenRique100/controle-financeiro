@@ -22,6 +22,75 @@ table{width:100%;border-collapse:collapse}th{background:var(--green);color:#fff;
 
 [hidden]{display:none!important}.account-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px}.sync{font-size:14px;color:var(--muted)}.sync.error{color:#bd1d16}.auth-panel{max-width:460px;margin:10vh auto;background:white;padding:24px;border:1px solid var(--line);border-radius:14px}.auth-panel input{width:100%;margin:6px 0 12px;padding:12px;border:1px solid var(--line);border-radius:7px}.auth-panel button{width:100%}.note{font-size:14px;color:var(--muted);line-height:1.5}.table-wrap{overflow:auto}
 @media(max-width:520px){.account-bar button{flex:1 1 auto}.account-bar .sync{flex-basis:100%}.table-wrap{overflow:auto}}
+
+/* Cabeçalho responsivo: título discreto e controles bem organizados. */
+#mainApp .top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  margin:0 0 22px;
+  padding:19px 22px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:0 3px 10px #2135470a;
+}
+#mainApp .top > div:first-child{min-width:0}
+#mainApp .top .brand{
+  color:var(--green);
+  font-size:clamp(21px,2vw,27px);
+  line-height:1.2;
+  font-weight:800;
+  letter-spacing:-.35px;
+}
+#mainApp .top .subtitle{margin-top:5px;font-size:13px;line-height:1.4;color:var(--muted)}
+#mainApp .top .controls{
+  display:grid;
+  grid-template-columns:44px minmax(145px,auto) 44px auto;
+  align-items:stretch;
+  gap:8px;
+  width:auto;
+}
+#mainApp .top .controls #prev,
+#mainApp .top .controls #next{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:44px;
+  min-height:44px;
+  padding:0;
+}
+#mainApp .top .month{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+  padding:10px 12px;
+  font-size:14px;
+  line-height:1.25;
+}
+#mainApp .top #addBtn{
+  grid-column:auto;
+  min-height:44px;
+  padding:10px 16px;
+  white-space:nowrap;
+}
+#mainApp .top button:focus-visible{
+  outline:3px solid #83b7a3;
+  outline-offset:2px;
+}
+@media(max-width:900px){
+  #mainApp .top{align-items:stretch;flex-direction:column;gap:16px}
+  #mainApp .top .controls{width:100%;grid-template-columns:44px minmax(0,1fr) 44px auto}
+}
+@media(max-width:600px){
+  #mainApp .top{padding:16px;gap:14px}
+  #mainApp .top .brand{font-size:22px}
+  #mainApp .top .controls{grid-template-columns:44px minmax(0,1fr) 44px}
+  #mainApp .top #addBtn{grid-column:1/-1;width:100%}
+}
+
 </style>
 </head>
 <body>
@@ -37,7 +106,7 @@ table{width:100%;border-collapse:collapse}th{background:var(--green);color:#fff;
   <div class="top">
     <div><div class="brand">Meu Controle Financeiro</div><div class="subtitle">Gastos, receitas e contas recorrentes por mês</div></div>
     <div class="controls">
-      <button class="btn-light" id="prev">◀</button><div class="month" id="monthLabel"></div><button class="btn-light" id="next">▶</button>
+      <button class="btn-light" id="prev" type="button" aria-label="Mês anterior">◀</button><div class="month" id="monthLabel"></div><button class="btn-light" id="next" type="button" aria-label="Próximo mês">▶</button>
       <button class="btn-primary" id="addBtn">＋ Adicionar lançamento</button>
     </div>
   </div>

@@ -278,18 +278,6 @@ body{background:var(--bg);color:var(--text)}
     <div class="card"><div class="label">Contas pagas</div><div class="value" id="paid">R$ 0,00</div><div class="trend" id="paidTrend">Despesas quitadas</div></div>
     <div class="card"><div class="label">Saldo do mês</div><div class="value balance" id="balance">R$ 0,00</div><div class="trend" id="balanceTrend">Receitas menos gastos</div></div>
   </div>
-
-  <section class="simulador" aria-labelledby="simuladorTitulo">
-    <h2 id="simuladorTitulo">Planejar um gasto</h2>
-    <p>Simule uma despesa extra usando o saldo do mês selecionado. O cálculo considera todas as receitas e despesas já lançadas, inclusive as pendentes.</p>
-    <form id="simuladorForm" class="simulador-grid">
-      <div class="field"><label for="simuladorCategoria">Categoria ou descrição</label><input id="simuladorCategoria" placeholder="Ex.: Banho do cachorro" maxlength="100" required></div>
-      <div class="field"><label for="simuladorValor">Valor do gasto (R$)</label><input id="simuladorValor" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0,00" required></div>
-      <button class="btn-primary" type="submit">Verificar saldo</button>
-    </form>
-    <div id="simuladorResultado" class="simulador-resultado" role="status" aria-live="polite" hidden></div>
-    <p style="margin-top:12px;margin-bottom:0">A simulação não salva uma categoria ou lançamento. O saldo é uma projeção: receitas futuras podem não estar disponíveis ainda.</p>
-  </section>
   <div class="analytics">
     <div class="chart-card"><div class="chart-title">Gastos por categoria</div><div class="chart-wrap"><canvas id="categoryChart"></canvas></div></div>
     <div class="chart-card"><div class="chart-title">Receitas x despesas — últimos 6 meses</div><div class="chart-wrap"><canvas id="monthlyChart"></canvas></div></div>
@@ -303,13 +291,13 @@ body{background:var(--bg);color:var(--text)}
 <div class="modal" id="modal"><div class="dialog"><h2 id="modalTitle">Adicionar lançamento</h2>
 <form id="form"><div class="form">
 <div class="field"><label>Item/Descrição *</label><input id="desc" required></div>
-<div class="field"><label>Tipo *</label><select id="type" required><option>Receita</option><option>Despesa</option><option>Lazer</option><option>Cartão de Crédito</option></select></div>
+<div class="field"><label>Tipo *</label><select id="type" required><option>Receita</option><option>Despesa</option><option>Lazer</option><option>Cartão de Crédito</option><option value="Planejar um gasto">Planejar um gasto</option></select></div>
 <div class="field"><label>Valor (R$) *</label><input id="value" type="number" min="0" step="0.01" required></div>
 <div class="field"><label>Data *</label><input id="date" type="date" required></div>
 <div class="field"><label>Status</label><select id="status"><option value="NAO_PAGO">Não pago</option><option value="PAGO">Pago</option><option value="NA">Não se aplica</option></select></div>
 <div class="field"><label>Recorrência</label><select id="recurring"><option value="false">Não repetir</option><option value="true">Repetir todos os meses</option></select></div>
 <div class="field full"><label>Observações</label><input id="notes"></div>
-</div><div class="modal-actions"><button type="button" class="btn-light" id="cancel">Cancelar</button><button class="btn-primary">Salvar lançamento</button></div></form></div></div>
+</div><div id="simuladorResultado" class="simulador-resultado" role="status" aria-live="polite" hidden></div><div class="modal-actions"><button type="button" class="btn-light" id="cancel">Cancelar</button><button class="btn-primary" id="salvarOuSimular">Salvar lançamento</button></div></form></div></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
@@ -364,40 +352,24 @@ paidTrend.insertAdjacentHTML(
 
 function atualizarSimulacao(){
  const box=byId('simuladorResultado');
- if(!ultimaSimulacao || ultimaSimulacao.mes!==monthKey(current) || !user){
-   ultimaSimulacao=null;box.hidden=true;return;
- }
+ if(!ultimaSimulacao || !user){box.hidden=true;return;}
  if(!ready || !navigator.onLine){
    box.hidden=false;box.classList.add('alerta');
-   box.textContent='Saldo indisponível para verificação: aguarde a conexão e o carregamento dos dados.';
+   box.textContent='Saldo indisponível: aguarde a conexão e o carregamento dos dados.';
    return;
  }
- const itens=data.filter(x=>x.month===monthKey(current));
+ const itens=data.filter(x=>x.month===ultimaSimulacao.mes);
  const centavos=itens.reduce((total,x)=>total+(x.type==='Receita'?1:-1)*Math.round((Number(x.value)||0)*100),0);
  const restante=centavos-ultimaSimulacao.valor;
- box.hidden=false;box.classList.toggle('alerta',restante<0);
- box.replaceChildren();
+ box.hidden=false;box.classList.toggle('alerta',restante<0);box.replaceChildren();
  const titulo=document.createElement('strong');
  titulo.textContent=restante>=0?'Saldo suficiente na projeção do mês.':'Saldo insuficiente na projeção do mês.';
  const resumo=document.createElement('span');
- resumo.textContent=`${ultimaSimulacao.descricao}: ${brl(ultimaSimulacao.valor/100)} · Saldo atual: ${brl(centavos/100)} · Saldo após o gasto: ${brl(restante/100)}.`;
+ resumo.textContent=`${ultimaSimulacao.descricao}: ${brl(ultimaSimulacao.valor/100)} · Saldo projetado: ${brl(centavos/100)} · Após o gasto: ${brl(restante/100)}.`;
  const nota=document.createElement('span');
- nota.textContent=restante>=0?'Pelo saldo projetado, seria possível pagar este gasto extra; confirme o dinheiro disponível na data do pagamento.':'Este gasto ultrapassa o saldo projetado do mês.';
+ nota.textContent='Simulação não salva. Inclui receitas e despesas do mês, inclusive futuras e pendentes; confirme a disponibilidade na data do pagamento.';
  box.append(titulo,resumo,nota);
 }
-byId('simuladorForm').addEventListener('submit',e=>{
- e.preventDefault();
- const descricao=byId('simuladorCategoria').value.trim();
- const numero=Number(byId('simuladorValor').value);
- if(!descricao || !Number.isFinite(numero) || numero<=0 || numero>1e10){
-   byId('simuladorResultado').hidden=false;
-   byId('simuladorResultado').classList.add('alerta');
-   byId('simuladorResultado').textContent='Informe uma descrição e um valor válido maior que zero.';
-   return;
- }
- ultimaSimulacao={descricao,valor:Math.round(numero*100),mes:monthKey(current)};
- atualizarSimulacao();
-});
 
 function updateCharts(mk){
  const monthItems=data.filter(x=>x.month===mk && x.type!=='Receita');
@@ -425,13 +397,28 @@ function updateCharts(mk){
 const rows=byId('rows'),incomeEl=byId('income'),expensesEl=byId('expenses'),paidEl=byId('paid'),balanceEl=byId('balance');
 const incomeTrend=byId('incomeTrend'),expenseTrend=byId('expenseTrend'),paidTrend=byId('paidTrend'),balanceTrend=byId('balanceTrend');
 const modal=byId('modal'),modalTitle=byId('modalTitle'),form=byId('form'),desc=byId('desc'),type=byId('type'),value=byId('value'),date=byId('date'),status=byId('status'),recurring=byId('recurring'),notes=byId('notes'),addBtn=byId('addBtn'),cancel=byId('cancel'),prev=byId('prev'),next=byId('next'),search=byId('search'),typeFilter=byId('typeFilter'),replicate=byId('replicate');
-function openModal(x){editId=x?.id||null;modalTitle.textContent=editId?'Editar lançamento':'Adicionar lançamento';desc.value=x?.desc||'';type.value=x?.type||'Despesa';value.value=x?.value??'';date.value=x?.date||`${monthKey(current)}-01`;status.value=x?.status||'NAO_PAGO';recurring.value=String(x?.recurring||false);notes.value=x?.notes||'';modal.classList.add('show')}
+function openModal(x){editId=x?.id||null;modalTitle.textContent=editId?'Editar lançamento':'Adicionar lançamento';desc.value=x?.desc||'';type.value=x?.type||'Despesa';value.value=x?.value??'';date.value=x?.date||`${monthKey(current)}-01`;status.value=x?.status||'NAO_PAGO';recurring.value=String(x?.recurring||false);notes.value=x?.notes||'';byId('type').querySelector('option[value="Planejar um gasto"]').disabled=!!editId;ultimaSimulacao=null;atualizarSimulacao();ajustarModoPlanejamento();modal.classList.add('show')}
 window.edit=id=>{const item=data.find(x=>x.id===id);if(item)openModal(item)};
 window.changeValue=async(id,val)=>{const item=data.find(x=>x.id===id),v=Number(val);if(!item||!Number.isFinite(v)||v<0||v===item.value)return;if(!canWrite()){render();return}try{await updateDoc(record(id),{value:v})}catch(e){showError(e);render()}};
 window.changeStatus=async(id,val)=>{if(!canWrite()){render();return}try{await updateDoc(record(id),{status:val})}catch(e){showError(e);render()}};
 window.removeItem=async id=>{if(!canWrite()||!confirm('Remover este lançamento?'))return;try{await deleteDoc(record(id))}catch(e){showError(e)}};
 addBtn.onclick=()=>openModal();cancel.onclick=()=>modal.classList.remove('show');
-form.onsubmit=async e=>{e.preventDefault();if(!canWrite())return;const d={id:editId||crypto.randomUUID(),desc:desc.value.trim(),type:type.value,value:+value.value,date:date.value,status:type.value==='Receita'?'NA':status.value,recurring:recurring.value==='true',notes:notes.value,month:date.value.slice(0,7)};if(!d.desc){alert('Informe a descrição.');return}const submit=form.querySelector('[type=submit],button:not([type])');submit.disabled=true;try{if(editId){const {id,...fields}=d;await updateDoc(record(d.id),fields)}else{await setDoc(record(d.id),d)}modal.classList.remove('show')}catch(e){showError(e)}finally{submit.disabled=false}};
+function ajustarModoPlanejamento(){
+ const simular=type.value==='Planejar um gasto';
+ byId('salvarOuSimular').textContent=simular?'Verificar saldo':'Salvar lançamento';
+ status.disabled=simular;recurring.disabled=simular;
+ ultimaSimulacao=null;atualizarSimulacao();
+}
+type.addEventListener('change',ajustarModoPlanejamento);
+[desc,value,date].forEach(el=>el.addEventListener('input',()=>{ultimaSimulacao=null;atualizarSimulacao()}));
+form.onsubmit=async e=>{e.preventDefault();
+ if(type.value==='Planejar um gasto'){
+   const numero=Number(value.value);
+   if(!desc.value.trim() || !Number.isFinite(numero) || numero<=0 || numero>1e10 || !date.value){alert('Informe descrição, data e valor válido maior que zero.');return}
+   ultimaSimulacao={descricao:desc.value.trim(),valor:Math.round(numero*100),mes:date.value.slice(0,7)};
+   atualizarSimulacao();return;
+ }
+ if(!canWrite())return;const d={id:editId||crypto.randomUUID(),desc:desc.value.trim(),type:type.value,value:+value.value,date:date.value,status:type.value==='Receita'?'NA':status.value,recurring:recurring.value==='true',notes:notes.value,month:date.value.slice(0,7)};if(!d.desc){alert('Informe a descrição.');return}const submit=form.querySelector('[type=submit],button:not([type])');submit.disabled=true;try{if(editId){const {id,...fields}=d;await updateDoc(record(d.id),fields)}else{await setDoc(record(d.id),d)}modal.classList.remove('show')}catch(e){showError(e)}finally{submit.disabled=false}};
 prev.onclick=()=>{current.setMonth(current.getMonth()-1);render()};next.onclick=()=>{current.setMonth(current.getMonth()+1);render()};search.oninput=render;typeFilter.onchange=render;document.getElementById('statusFilter').onchange=render;
 replicate.onclick=async()=>{if(!canWrite())return;const target=monthKey(current), prevD=new Date(current);prevD.setMonth(prevD.getMonth()-1);const source=monthKey(prevD), existing=new Set(data.filter(x=>x.month===target).map(x=>x.desc+'|'+x.value));const copies=[];data.filter(x=>x.month===source&&x.recurring).forEach(x=>{const k=x.desc+'|'+x.value;if(!existing.has(k)){const day=Math.min(Number(x.date.slice(8,10)),new Date(current.getFullYear(),current.getMonth()+1,0).getDate());copies.push({...x,id:crypto.randomUUID(),date:`${target}-${pad(day)}`,month:target,status:x.type==='Receita'?'NA':'NAO_PAGO'});existing.add(k)}});if(!copies.length){alert('Nenhum lançamento novo para replicar.');return}if(copies.length>450){alert('Há lançamentos demais para replicar de uma vez.');return}replicate.disabled=true;try{const batch=writeBatch(db);copies.forEach(x=>batch.set(record(x.id),x));await batch.commit();alert(`${copies.length} lançamento(s) recorrente(s) replicado(s).`)}catch(e){showError(e)}finally{replicate.disabled=false}};
 byId('loginForm').onsubmit=async e=>{e.preventDefault();byId('loginBtn').disabled=true;byId('authMessage').textContent='Entrando...';try{await signInWithEmailAndPassword(auth,byId('email').value,byId('password').value);byId('password').value='';byId('authMessage').textContent=''}catch(err){console.error(err);byId('authMessage').textContent='Não foi possível entrar. Confira o e-mail, a senha e a configuração do Firebase.'}finally{byId('loginBtn').disabled=false}};

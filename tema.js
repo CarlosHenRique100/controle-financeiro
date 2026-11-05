@@ -49,7 +49,23 @@ html[data-tema="escuro"] #mainApp #calendarioContas .calendario-dia.selecionado{
 html[data-tema="escuro"] #mainApp #calendarioContas .calendario-dia.hoje{background:#2f4a3a;border-color:#a1d8b6}
 html[data-tema="escuro"] #mainApp #calendarioContas .calendario-dia.hoje.selecionado{background:#31543f;border-color:#b2e7c6}
 html[data-tema="escuro"] #mainApp #calendarioContas .calendario-dia.hoje .calendario-numero{background:#b3e6c6;color:#143426}
-html[data-tema="escuro"] #mainApp #calendarioContas :is(.calendario-valor,.calendario-lista .calendario-item-valor){color:#ffb2a6}
+
+html[data-tema="escuro"] #mainApp #calendarioContas :is(.calendario-valor,.calendario-item-valor,.calendario-marcadores span).calendario-receita{color:#a7e7be}
+html[data-tema="escuro"] #mainApp #calendarioContas :is(.calendario-valor,.calendario-item-valor,.calendario-marcadores span).calendario-pago{color:#a6d1e6}
+html[data-tema="escuro"] #mainApp #calendarioContas :is(.calendario-valor,.calendario-item-valor,.calendario-marcadores span).calendario-pendente{color:#ffb2a6}
+html[data-tema="escuro"] #mainApp .cards{background:#1d2b26;border-color:var(--line)}
+html[data-tema="escuro"] #mainApp .card{border-color:var(--line)}
+html[data-tema="escuro"] #mainApp .card .saldo-negativo{color:#ffaaa0}
+html[data-tema="escuro"] #mainApp .conta-menu summary,html[data-tema="escuro"] #mainApp .conta-opcoes{background:#293c34;color:#e6f1ec;border-color:#577267}
+html[data-tema="escuro"] .simulador-resultado{background:#294a39;color:#def4e5}
+html[data-tema="escuro"] .simulador-resultado.alerta{background:#573a36;color:#ffe0da}
+html[data-tema="escuro"] #mainApp .table-wrap .valor-formatado.valor-receita{color:#a7e7be}
+html[data-tema="escuro"] #mainApp .table-wrap .valor-formatado.valor-despesa{color:#ffb2a6}
+html[data-tema="escuro"] #mainApp .table-wrap .valor-formatado:focus{color:#e6f1ec}
+
+html[data-tema="escuro"] #mainApp #calendarioContas .calendario-lista .calendario-item-valor.calendario-receita{color:#a7e7be}
+html[data-tema="escuro"] #mainApp #calendarioContas .calendario-lista .calendario-item-valor.calendario-pago{color:#a6d1e6}
+html[data-tema="escuro"] #mainApp #calendarioContas .calendario-lista .calendario-item-valor.calendario-pendente{color:#ffb2a6}
 html[data-tema="escuro"] #mainApp #calendarioContas .calendario-lista li{border-color:var(--line)}
 html[data-tema="escuro"] #mainApp .sync.error{color:#ffb2a6}
 html[data-tema="escuro"] :is(button,input,select):focus-visible{outline-color:#a9e5bf}

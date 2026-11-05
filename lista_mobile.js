@@ -51,7 +51,7 @@ export function iniciarListaMobile() {
       #mainApp #rows tr td:nth-child(7) { padding-top:6px; border-top:1px solid var(--line); }
       #mainApp #rows tr td:nth-child(7) .actions { gap:8px; }
       #mainApp #rows tr td:nth-child(7) .icon-btn { min-width:44px; min-height:44px; }
-      #mainApp #rows tr .value-edit { width:112px; max-width:100%; padding:5px 2px; }
+      #mainApp #rows tr .value-edit { width:145px; max-width:100%; padding:5px 2px; }
       #mainApp #rows tr .status-select { max-width:100%; padding:7px 24px 7px 8px; font-size:12px; }
       #mainApp #rows tr .mobile-detalhes-btn { display:block; margin-top:6px; padding:7px 0;
         color:var(--green); background:transparent; text-align:left; font-size:13px; }

@@ -80,11 +80,12 @@ function criarInterface() {
     <div class="calendario-conteudo">
       <div class="calendario-semana" aria-hidden="true"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div>
       <div id="calendarioGrade" class="calendario-grade"></div>
+      <p class="calendario-legenda">+ Receita · − Pendente · ✓ Pago · ! Vencimento próximo ou vencido. Toque no dia para ver os valores.</p>
       <div id="calendarioDetalhes" class="calendario-detalhes" aria-live="polite"><p>Selecione um dia para ver os lançamentos.</p></div>
     </div>`;
-  const analytics = document.querySelector('#mainApp .analytics');
-  if (!analytics) throw new Error('Não foi possível localizar a área de gráficos para inserir o calendário.');
-  analytics.before(section);
+  const lista = document.querySelector('#mainApp .panel');
+  if (!lista) throw new Error('Não foi possível localizar a lista para inserir o calendário.');
+  lista.before(section);
 
   section.addEventListener('click', event => {
     const button = event.target.closest('button[data-dia]');
@@ -145,7 +146,8 @@ function desenhar(contexto) {
     // O marcador de quantidade só existe para pendentes: os alertas de
     // vencimento não devem ser exibidos para receitas ou contas pagas.
     const qtd = grupos.pendentes.length ? `<span class="calendario-qtd">${grupos.pendentes.length} pendente(s)</span>` : '';
-    html.push(`<button type="button" class="calendario-dia${chave === diaSelecionado ? ' selecionado' : ''}${chave === hojeTexto ? ' hoje' : ''}" data-dia="${chave}" aria-pressed="${chave === diaSelecionado}" aria-label="Dia ${dia}: ${escapeHtml(resumo)}"><span class="calendario-numero">${dia}</span>${valores}${qtd}</button>`);
+    const marcadores = `<span class="calendario-marcadores" aria-hidden="true">${grupos.receitas.length ? '<span class="calendario-receita">+</span>' : ''}${grupos.pendentes.length ? '<span class="calendario-pendente">−</span>' : ''}${grupos.pagas.length ? '<span class="calendario-pago">✓</span>' : ''}</span>`;
+    html.push(`<button type="button" class="calendario-dia${chave === diaSelecionado ? ' selecionado' : ''}${chave === hojeTexto ? ' hoje' : ''}" data-dia="${chave}" aria-pressed="${chave === diaSelecionado}" aria-label="Dia ${dia}: ${escapeHtml(resumo)}"><span class="calendario-numero">${dia}</span>${valores}${qtd}${marcadores}</button>`);
   }
   document.getElementById('calendarioGrade').innerHTML = html.join('');
 
@@ -168,7 +170,10 @@ function desenhar(contexto) {
   ].filter(Boolean).join(' · ');
   detalhes.innerHTML = `<h3>Lançamentos de ${dataFormatada}</h3><p>${resumo}</p><ul class="calendario-lista">${lista.map(item => {
     const receita = item.type === 'Receita';
-    const situacao = receita ? 'Receita' : item.status === 'PAGO' ? 'Pago' : 'Não pago';
+    const pendente = !receita && item.status !== 'PAGO';
+    const diferenca = Math.round((Date.UTC(ano,mes,Number(diaSelecionado.slice(8,10))) - Date.UTC(hoje.getFullYear(),hoje.getMonth(),hoje.getDate())) / 86400000);
+    const prazo = pendente ? (diferenca < 0 ? ' · Vencida' : diferenca === 0 ? ' · Vence hoje' : diferenca === 1 ? ' · Vence amanhã' : diferenca <= 3 ? ` · Vence em ${diferenca} dias` : '') : '';
+    const situacao = (receita ? 'Receita' : item.status === 'PAGO' ? 'Pago' : 'Não pago') + prazo;
     const classe = receita ? 'calendario-receita' : item.status === 'PAGO' ? 'calendario-pago' : 'calendario-pendente';
     return `<li><span><strong>${escapeHtml(item.desc)}</strong><br><small>${escapeHtml(item.type)} · ${situacao}</small></span><span class="calendario-item-valor ${classe}">${receita ? '+ ' : '− '}${escapeHtml(brl(Number(item.value) || 0))}</span></li>`;
   }).join('')}</ul>`;

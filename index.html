@@ -253,6 +253,106 @@ body{background:var(--bg);color:var(--text)}
 .simulador-resultado span{margin-top:3px}
 @media(max-width:600px){.simulador{padding:16px}.simulador-grid{grid-template-columns:1fr}.simulador-grid button{width:100%}}
 
+
+/* Aperfeiçoamento visual: hierarquia simples e área de trabalho legível. */
+#mainApp{max-width:1320px;margin:auto}
+#mainApp .account-bar{position:relative;gap:10px;margin:0 0 12px;font-size:13px}
+#mainApp #userEmail{font-weight:700;overflow-wrap:anywhere}
+#mainApp .sync{margin-right:auto}
+#mainApp .conta-menu{position:relative}
+#mainApp .conta-menu summary{list-style:none;cursor:pointer;border:1px solid var(--line);border-radius:9px;padding:11px 14px;font-weight:700;min-height:42px;background:#fff;color:var(--text)}
+#mainApp .conta-menu summary::-webkit-details-marker{display:none}
+#mainApp .conta-menu summary::after{content:' ▾'}
+#mainApp .conta-menu summary:focus-visible{outline:3px solid #8abca7;outline-offset:2px}
+#mainApp .conta-opcoes{position:absolute;z-index:10;right:0;top:calc(100% + 6px);width:230px;padding:6px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 22px #16382a26}
+#mainApp .conta-opcoes button{display:block;width:100%;text-align:left;border:0;min-height:42px}
+#mainApp .cards{gap:0;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+#mainApp .card{border:0;border-radius:0;box-shadow:none;border-right:1px solid var(--line)}
+#mainApp .card:last-child{border-right:0}
+#mainApp .card .saldo-negativo{color:#a34b42}
+#mainApp .panel{margin-bottom:18px}
+#mainApp .table-wrap .valor-formatado{width:155px;font-variant-numeric:tabular-nums;cursor:text}
+#mainApp .table-wrap .valor-receita{color:#276b50}
+#mainApp .table-wrap .valor-despesa{color:#98483f}
+#mainApp .table-wrap .valor-formatado:focus{color:var(--text)}
+#mainApp #calendarioContas .calendario-receita{color:#276b50}
+#mainApp #calendarioContas .calendario-pago{color:#426b7e}
+#mainApp #calendarioContas .calendario-pendente{color:#98483f}
+#mainApp #calendarioContas .calendario-lista .calendario-item-valor.calendario-receita{color:#276b50}
+#mainApp #calendarioContas .calendario-lista .calendario-item-valor.calendario-pago{color:#426b7e}
+#mainApp #calendarioContas .calendario-lista .calendario-item-valor.calendario-pendente{color:#98483f}
+#mainApp #calendarioContas .calendario-marcadores{display:none}
+#mainApp #calendarioContas .calendario-legenda{display:none}
+.nota-planejamento{font-size:13px;line-height:1.45;color:var(--muted)}
+.simulador-resultado{color:#234a35}
+@media(max-width:900px){
+ #mainApp .card:nth-child(2){border-right:0}
+ #mainApp .card:nth-child(-n+2){border-bottom:1px solid var(--line)}
+}
+@media(max-width:700px){
+ #mainApp .table-wrap .valor-formatado{width:145px}
+}
+@media(max-width:520px){
+ #mainApp .cards{gap:0}
+ #mainApp .account-bar .sync{flex-basis:100%;order:5}
+ #mainApp .account-bar button{flex:0 0 auto}
+ #mainApp .conta-opcoes{position:absolute}
+ #mainApp #calendarioContas .calendario-dia{min-height:63px;align-items:center;gap:3px}
+ #mainApp #calendarioContas .calendario-numero{font-size:14px}
+ #mainApp #calendarioContas .calendario-dia .calendario-valor,
+ #mainApp #calendarioContas .calendario-dia .calendario-qtd,
+ #mainApp #calendarioContas .calendario-dia .aviso-vencimento{display:none}
+ #mainApp #calendarioContas .calendario-marcadores{display:flex;flex-wrap:wrap;justify-content:center;gap:2px;font-size:12px;line-height:1;font-weight:800}
+ #mainApp #calendarioContas .calendario-legenda{display:block;margin:10px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+ #mainApp #calendarioContas .aviso-dia-vencida .calendario-numero::after,
+ #mainApp #calendarioContas .aviso-dia-hoje .calendario-numero::after,
+ #mainApp #calendarioContas .aviso-dia-proxima .calendario-numero::after{content:'!';font-size:10px;margin-left:2px}
+}
+@media(prefers-reduced-motion:no-preference){
+ #mainApp button,#mainApp .calendario-dia{transition:background-color .15s,border-color .15s,color .15s}
+}
+
+
+#mainApp .card{position:relative}
+.ordenar-cartao{display:flex;align-items:center;gap:5px;margin-top:10px}
+.ordenar-cartao button{min-width:40px;min-height:36px;padding:5px 9px;font-size:15px}
+.ordenar-cartao .alca{cursor:grab;color:var(--muted);font-size:13px;padding:7px}
+.card.arrastando{opacity:.55}
+#mainApp .planejados{margin:0 0 18px}
+.planejados .panel-head{border-bottom:1px solid var(--line);padding:16px 20px}
+.lista-planejados{list-style:none;margin:0;padding:0 20px}
+.plano-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.plano-item:last-child{border-bottom:0}
+.plano-info{display:flex;flex-direction:column;gap:5px;min-width:0;overflow-wrap:anywhere}
+.plano-detalhe,.plano-nota{color:var(--muted);font-size:13px;line-height:1.4}
+.plano-nota{padding:0 20px 14px;margin:0}
+.plano-acoes{display:flex;align-items:center;gap:8px}
+@media(max-width:520px){.plano-item{align-items:flex-start}.plano-acoes{flex-direction:column;align-items:flex-end}}
+
+
+#secoesOrdenaveis .secao-movivel{margin-bottom:18px;min-width:0}
+#secoesOrdenaveis .secao-ordenar{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin:0 0 6px}
+#secoesOrdenaveis .secao-alca{margin-right:auto;padding:8px 4px;color:var(--muted);font-size:13px;font-weight:700;cursor:grab}
+#secoesOrdenaveis .secao-ordenar button{min-width:42px;min-height:42px;padding:6px 10px}
+#secoesOrdenaveis .secao-ordenar button:disabled{opacity:.4;cursor:not-allowed}
+#secoesOrdenaveis .secao-arrastando{opacity:.55}
+#secoesOrdenaveis .planejados,#secoesOrdenaveis #calendarioContas,#secoesOrdenaveis .analytics{margin-bottom:0}
+.secao-anuncio{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+
+/* Orientação e estados de interação do calendário */
+#mainApp #calendarioContas .calendario-ajuda{margin:6px 0 0;font-size:13px;line-height:1.45;color:var(--muted)}
+#mainApp #calendarioContas .calendario-dia{min-height:76px;cursor:pointer}
+#mainApp #calendarioContas .calendario-dia:focus-visible,
+#mainApp .plano-acoes button:focus-visible{outline:3px solid #3c9b72;outline-offset:2px}
+#mainApp #calendarioContas .calendario-dia.selecionado{outline:2px solid #397b5c;outline-offset:-2px}
+#mainApp .plano-acoes button{min-height:44px}
+@media(max-width:520px){
+ #mainApp #calendarioContas .calendario-dia{min-height:52px}
+ #mainApp .plano-acoes{align-items:stretch}
+}
+@media(prefers-reduced-motion:reduce){#mainApp #calendarioContas .calendario-dia{transition:none}}
+
 </style>
 </head>
 <body>
@@ -264,7 +364,7 @@ body{background:var(--bg);color:var(--text)}
  <p id="authMessage" class="note" role="alert"></p>
 </section>
 <div id="mainApp" hidden>
-<div class="account-bar"><span id="userEmail"></span><button class="btn-light" id="logoutBtn">Sair</button><button class="btn-light" id="exportBtn">Baixar backup JSON</button><button class="btn-light" id="importBtn">Importar backup JSON</button><input type="file" id="importFile" accept=".json,application/json" hidden><span id="syncStatus" class="sync" role="status">Conectando...</span></div>
+<div class="account-bar"><span id="userEmail"></span><span id="syncStatus" class="sync" role="status">Conectando...</span><details class="conta-menu"><summary>Conta e backup</summary><div class="conta-opcoes"><button type="button" class="btn-light" id="exportBtn">Baixar backup JSON</button><button type="button" class="btn-light" id="importBtn">Importar backup JSON</button><button type="button" class="btn-light" id="logoutBtn">Sair da conta</button></div></details><input type="file" id="importFile" accept=".json,application/json" hidden></div>
   <div class="top">
     <div><div class="brand">Meu Controle Financeiro</div><div class="subtitle">Gastos, receitas e contas recorrentes por mês</div></div>
     <div class="controls">
@@ -272,32 +372,37 @@ body{background:var(--bg);color:var(--text)}
       <button class="btn-primary" id="addBtn">＋ Adicionar lançamento</button>
     </div>
   </div>
-  <div class="cards">
+  <div class="cards" id="cartoesResumo">
     <div class="card"><div class="label">Receitas</div><div class="value income" id="income">R$ 0,00</div><div class="trend" id="incomeTrend">Entradas do mês</div></div>
     <div class="card"><div class="label">Gastos</div><div class="value expense" id="expenses">R$ 0,00</div><div class="trend" id="expenseTrend">Saídas do mês</div></div>
     <div class="card"><div class="label">Contas pagas</div><div class="value" id="paid">R$ 0,00</div><div class="trend" id="paidTrend">Despesas quitadas</div></div>
-    <div class="card"><div class="label">Saldo do mês</div><div class="value balance" id="balance">R$ 0,00</div><div class="trend" id="balanceTrend">Receitas menos gastos</div></div>
+    <div class="card"><div class="label">Saldo projetado do mês</div><div class="value balance" id="balance">R$ 0,00</div><div class="trend" id="balanceTrend">Inclui receitas e despesas futuras e pendentes.</div></div>
   </div>
+  <section class="panel planejados" aria-labelledby="planejadosTitulo">
+    <div class="panel-head"><h2 id="planejadosTitulo">Gastos planejados</h2></div>
+    <ul class="lista-planejados" id="listaPlanejados"></ul>
+    <p class="plano-nota">A verificação é individual e considera o mês inteiro, inclusive receitas e despesas futuras ou pendentes. Não soma os outros planejamentos nem garante saldo na data escolhida.</p>
+  </section>
+  <section class="panel">
+    <div class="panel-head"><h2>Lançamentos de <span id="monthTitle"></span></h2><div class="filter"><input id="search" aria-label="Buscar lançamentos" placeholder="Buscar..." /><select id="typeFilter" aria-label="Filtrar por tipo"><option value="">Todos os tipos</option><option>Receita</option><option>Despesa</option><option>Lazer</option><option>Cartão de Crédito</option></select><select id="statusFilter" aria-label="Filtrar por situação"><option value="">Todas as situações</option><option value="pendentes">Pendentes</option><option value="pagas">Pagas</option></select><button class="btn-light" id="replicate">Replicar recorrentes</button></div></div>
+    <div class="table-wrap"><table><thead><tr><th>Item/Descrição</th><th>Tipo</th><th class="right">Valor</th><th>Data</th><th>Despesa paga</th><th>Observações</th><th>Ações</th></tr></thead><tbody id="rows"></tbody></table></div>
+  </section>
   <div class="analytics">
     <div class="chart-card"><div class="chart-title">Gastos por categoria</div><div class="chart-wrap"><canvas id="categoryChart"></canvas></div></div>
     <div class="chart-card"><div class="chart-title">Receitas x despesas — últimos 6 meses</div><div class="chart-wrap"><canvas id="monthlyChart"></canvas></div></div>
   </div>
-  <section class="panel">
-    <div class="panel-head"><h2>Lançamentos de <span id="monthTitle"></span></h2><div class="filter"><input id="search" placeholder="Buscar..." /><select id="typeFilter"><option value="">Todos os tipos</option><option>Receita</option><option>Despesa</option><option>Lazer</option><option>Cartão de Crédito</option></select><select id="statusFilter" aria-label="Filtrar por situação"><option value="">Todas as situações</option><option value="pendentes">Pendentes</option><option value="pagas">Pagas</option></select><button class="btn-light" id="replicate">Replicar recorrentes</button></div></div>
-    <div class="table-wrap"><table><thead><tr><th>Item/Descrição</th><th>Tipo</th><th class="right">Valor</th><th>Data</th><th>Despesa paga</th><th>Observações</th><th>Ações</th></tr></thead><tbody id="rows"></tbody></table></div>
-  </section>
 </div></div>
 
-<div class="modal" id="modal"><div class="dialog"><h2 id="modalTitle">Adicionar lançamento</h2>
+<div class="modal" id="modal"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><h2 id="modalTitle">Adicionar lançamento</h2>
 <form id="form"><div class="form">
-<div class="field"><label>Item/Descrição *</label><input id="desc" required></div>
-<div class="field"><label>Tipo *</label><select id="type" required><option>Receita</option><option>Despesa</option><option>Lazer</option><option>Cartão de Crédito</option><option value="Planejar um gasto">Planejar um gasto</option></select></div>
-<div class="field"><label>Valor (R$) *</label><input id="value" type="number" min="0" step="0.01" required></div>
-<div class="field"><label>Data *</label><input id="date" type="date" required></div>
-<div class="field"><label>Status</label><select id="status"><option value="NAO_PAGO">Não pago</option><option value="PAGO">Pago</option><option value="NA">Não se aplica</option></select></div>
-<div class="field"><label>Recorrência</label><select id="recurring"><option value="false">Não repetir</option><option value="true">Repetir todos os meses</option></select></div>
-<div class="field full"><label>Observações</label><input id="notes"></div>
-</div><div id="simuladorResultado" class="simulador-resultado" role="status" aria-live="polite" hidden></div><div class="modal-actions"><button type="button" class="btn-light" id="cancel">Cancelar</button><button class="btn-primary" id="salvarOuSimular">Salvar lançamento</button></div></form></div></div>
+<div class="field"><label for="desc">Item/Descrição *</label><input id="desc" required></div>
+<div class="field"><label for="type">Tipo *</label><select id="type" required><option>Receita</option><option>Despesa</option><option>Lazer</option><option>Cartão de Crédito</option><option value="Planejar um gasto">Planejar um gasto</option></select></div>
+<div class="field"><label for="value">Valor (R$) *</label><input id="value" type="number" min="0" step="0.01" required></div>
+<div class="field"><label for="date">Data *</label><input id="date" type="date" required></div>
+<div class="field"><label for="status">Status</label><select id="status"><option value="NAO_PAGO">Não pago</option><option value="PAGO">Pago</option><option value="NA">Não se aplica</option></select></div>
+<div class="field"><label for="recurring">Recorrência</label><select id="recurring"><option value="false">Não repetir</option><option value="true">Repetir todos os meses</option></select></div>
+<div class="field full"><label for="notes">Observações</label><input id="notes"></div>
+</div><p id="planejamentoNota" class="nota-planejamento" hidden>Salve o planejamento para consultar a verificação de saldo em Gastos planejados. Ele não altera o saldo.</p><div id="simuladorResultado" class="simulador-resultado" role="status" aria-live="polite" hidden></div><div class="modal-actions"><button type="button" class="btn-light" id="cancel">Cancelar</button><button type="button" class="btn-light" id="salvarPlano" hidden>Salvar planejamento</button><button class="btn-primary" id="salvarOuSimular">Salvar lançamento</button></div></form></div></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
@@ -312,7 +417,8 @@ iniciarVencimentos();
 import { iniciarListaMobile } from "./lista_mobile.js";
 iniciarListaMobile();
 const app=initializeApp(firebaseConfig), auth=getAuth(app), db=getFirestore(app);
-let ultimaSimulacao=null;
+let ultimaSimulacao=null, planos=[];
+const planosVerificados = new Set();
 let data=[], current=new Date(new Date().getFullYear(),new Date().getMonth(),1), editId=null, categoryChart=null, monthlyChart=null, user=null, unsubscribe=null, ready=false;
 const byId=id=>document.getElementById(id);
 const brl=n=>n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'}), pad=n=>String(n).padStart(2,'0');
@@ -331,10 +437,10 @@ function render(){
  const items=data.filter(x=>x.month===mk && (!q||(x.desc+x.notes).toLowerCase().includes(q)) && (!tf||x.type===tf) && (!situacao || (situacao==='pendentes' && x.type!=='Receita' && x.status!=='PAGO') || (situacao==='pagas' && x.type!=='Receita' && x.status==='PAGO')));
  const income=data.filter(x=>x.month===mk&&x.type==='Receita').reduce((a,x)=>a+x.value,0), exp=data.filter(x=>x.month===mk&&x.type!=='Receita').reduce((a,x)=>a+x.value,0), paid=data.filter(x=>x.month===mk&&x.status==='PAGO'&&x.type!=='Receita').reduce((a,x)=>a+x.value,0);
  incomeEl.textContent=brl(income); expensesEl.textContent=brl(exp); paidEl.textContent=brl(paid); balanceEl.textContent=brl(income-exp);
- rows.innerHTML=items.length?items.map(x=>`<tr><td><b>${escapeHtml(x.desc)}</b>${x.recurring?'<br><span class="recorrente">↻ recorrente</span>':''}</td><td><span class="pill ${x.type==='Receita'?'receita':x.type==='Lazer'?'lazer':x.type==='Cartão de Crédito'?'cartao':'despesa'}">${escapeHtml(x.type)}</span></td><td class="right"><input class="value-edit" type="number" min="0" step="0.01" value="${x.value.toFixed(2)}" aria-label="Alterar valor de ${escapeHtml(x.desc)}" onchange="changeValue('${x.id}', this.value)" onblur="changeValue('${x.id}', this.value)"></td><td>${fmtDate(x.date)}</td><td>${x.type==='Receita'?'—':`<select class="status-select ${x.status==='PAGO'?'status-paid':'status-unpaid'}" onchange="changeStatus('${x.id}', this.value)"><option value="NAO_PAGO" ${x.status!=='PAGO'?'selected':''}>NÃO PAGO</option><option value="PAGO" ${x.status==='PAGO'?'selected':''}>PAGO</option></select>`}</td><td>${escapeHtml(x.notes||'')}</td><td><div class="actions"><button class="icon-btn" onclick="edit('${x.id}')" aria-label="Editar">✎</button><button class="icon-btn" onclick="removeItem('${x.id}')" aria-label="Excluir">🗑</button></div></td></tr>`).join(''):'<tr><td colspan="7" class="empty">Nenhum lançamento neste mês.</td></tr>';
+ rows.innerHTML=items.length?items.map(x=>`<tr><td><b>${escapeHtml(x.desc)}</b>${x.recurring?'<br><span class="recorrente">↻ recorrente</span>':''}</td><td><span class="pill ${x.type==='Receita'?'receita':x.type==='Lazer'?'lazer':x.type==='Cartão de Crédito'?'cartao':'despesa'}">${escapeHtml(x.type)}</span></td><td class="right"><input class="value-edit valor-formatado ${x.type==='Receita'?'valor-receita':'valor-despesa'}" type="text" inputmode="decimal" value="${escapeHtml(formatarValorLista(x.value,x.type))}" data-id="${escapeHtml(x.id)}" data-valor="${Number(x.value)}" data-tipo="${escapeHtml(x.type)}" aria-label="Alterar valor de ${escapeHtml(x.desc)}"></td><td>${fmtDate(x.date)}</td><td>${x.type==='Receita'?'—':`<select class="status-select ${x.status==='PAGO'?'status-paid':'status-unpaid'}" onchange="changeStatus('${x.id}', this.value)"><option value="NAO_PAGO" ${x.status!=='PAGO'?'selected':''}>NÃO PAGO</option><option value="PAGO" ${x.status==='PAGO'?'selected':''}>PAGO</option></select>`}</td><td>${escapeHtml(x.notes||'')}</td><td><div class="actions"><button class="icon-btn" onclick="edit('${x.id}')" aria-label="Editar">✎</button><button class="icon-btn" onclick="removeItem('${x.id}')" aria-label="Excluir">🗑</button></div></td></tr>`).join(''):'<tr><td colspan="7" class="empty">Nenhum lançamento neste mês.</td></tr>';
  incomeTrend.textContent=`${data.filter(x=>x.month===mk&&x.type==='Receita').length} lançamento(s)`;
  expenseTrend.textContent=`${data.filter(x=>x.month===mk&&x.type!=='Receita').length} lançamento(s)`;
- paidTrend.textContent=exp?`${Math.round((paid/exp)*100)}% das despesas`:'Nenhuma despesa';
+ paidTrend.textContent=exp?`${Math.round((paid/exp)*100)}% dos gastos · Já incluídas em gastos`:'Nenhuma despesa';
  const pendenteCentavos = data
   .filter(x => x.month === mk && x.type !== 'Receita' && x.status !== 'PAGO')
   .reduce((total, x) => total + Math.round(x.value * 100), 0);
@@ -343,9 +449,19 @@ paidTrend.insertAdjacentHTML(
   'beforeend',
   '<br>Falta pagar: ' + brl(pendenteCentavos / 100)
 );
- balanceTrend.textContent=income>=exp?'Saldo positivo':'Atenção ao saldo';
+ balanceTrend.textContent='Inclui receitas e despesas futuras e pendentes.';
+ balanceEl.classList.toggle('saldo-negativo',income<exp);
  atualizarSimulacao();
+ renderPlanejados();
  iniciarCalendario({ data, current, brl, escapeHtml });
+ const cabecalhoCalendario=byId('calendarioContas')?.querySelector('.calendario-cabecalho');
+ if(cabecalhoCalendario && !cabecalhoCalendario.querySelector('.calendario-ajuda')){
+  const ajuda=document.createElement('p');
+  ajuda.className='calendario-ajuda';
+  ajuda.textContent='Selecione um dia para consultar seus lançamentos. O dia de hoje e o dia selecionado ficam destacados.';
+  cabecalhoCalendario.append(ajuda);
+ }
+ iniciarOrdenacaoSecoes();
  if(typeof Chart !== 'undefined') updateCharts(mk);
 }
 
@@ -367,7 +483,7 @@ function atualizarSimulacao(){
  const resumo=document.createElement('span');
  resumo.textContent=`${ultimaSimulacao.descricao}: ${brl(ultimaSimulacao.valor/100)} · Saldo projetado: ${brl(centavos/100)} · Após o gasto: ${brl(restante/100)}.`;
  const nota=document.createElement('span');
- nota.textContent='Simulação não salva. Inclui receitas e despesas do mês, inclusive futuras e pendentes; confirme a disponibilidade na data do pagamento.';
+ nota.textContent='Simulação individual. Inclui receitas e despesas do mês, inclusive futuras e pendentes; confirme a disponibilidade na data do pagamento.';
  box.append(titulo,resumo,nota);
 }
 
@@ -394,41 +510,184 @@ function updateCharts(mk){
  });
 }
 
+
+function formatarValorLista(valor,tipo){
+ return (tipo==='Receita'?'+ ':'− ')+brl(Number(valor)||0);
+}
+function lerValorDigitado(texto){
+ const s=texto.trim().replace(/\s/g,'').replace(/^R\$/i,'');
+ if(!s)return null;
+ let n;
+ if(/^\d{1,3}(\.\d{3})+(,\d{1,2})?$/.test(s)) n=Number(s.replace(/\./g,'').replace(',','.'));
+ else if(/^\d+(?:[,.]\d{1,2})?$/.test(s)) n=Number(s.replace(',','.'));
+ else return null;
+ return Number.isFinite(n)&&n>=0?n:null;
+}
 const rows=byId('rows'),incomeEl=byId('income'),expensesEl=byId('expenses'),paidEl=byId('paid'),balanceEl=byId('balance');
 const incomeTrend=byId('incomeTrend'),expenseTrend=byId('expenseTrend'),paidTrend=byId('paidTrend'),balanceTrend=byId('balanceTrend');
 const modal=byId('modal'),modalTitle=byId('modalTitle'),form=byId('form'),desc=byId('desc'),type=byId('type'),value=byId('value'),date=byId('date'),status=byId('status'),recurring=byId('recurring'),notes=byId('notes'),addBtn=byId('addBtn'),cancel=byId('cancel'),prev=byId('prev'),next=byId('next'),search=byId('search'),typeFilter=byId('typeFilter'),replicate=byId('replicate');
-function openModal(x){editId=x?.id||null;modalTitle.textContent=editId?'Editar lançamento':'Adicionar lançamento';desc.value=x?.desc||'';type.value=x?.type||'Despesa';value.value=x?.value??'';date.value=x?.date||`${monthKey(current)}-01`;status.value=x?.status||'NAO_PAGO';recurring.value=String(x?.recurring||false);notes.value=x?.notes||'';byId('type').querySelector('option[value="Planejar um gasto"]').disabled=!!editId;ultimaSimulacao=null;atualizarSimulacao();ajustarModoPlanejamento();modal.classList.add('show')}
+
+// Valores são editados como números; a apresentação em reais não altera os dados.
+rows.addEventListener('focusin',e=>{
+ const campo=e.target.closest('.valor-formatado');if(!campo)return;
+ campo.value=Number(campo.dataset.valor).toFixed(2).replace('.',',');
+ campo.dataset.valorFoco=campo.value;campo.dataset.cancelado='false';campo.select();
+});
+rows.addEventListener('keydown',e=>{
+ const campo=e.target.closest('.valor-formatado');if(!campo)return;
+ if(e.key==='Enter'){e.preventDefault();campo.blur()}
+ if(e.key==='Escape'){e.preventDefault();campo.dataset.cancelado='true';campo.blur()}
+});
+rows.addEventListener('focusout',e=>{
+ const campo=e.target.closest('.valor-formatado');if(!campo)return;
+ const original=Number(campo.dataset.valor);
+ if(campo.dataset.cancelado==='true'||campo.value===campo.dataset.valorFoco){campo.value=formatarValorLista(original,campo.dataset.tipo);return}
+ const novo=lerValorDigitado(campo.value);
+ if(novo===null){alert('Informe um valor válido e não negativo, por exemplo 1.500,00.');campo.value=formatarValorLista(original,campo.dataset.tipo);return}
+ campo.value=formatarValorLista(novo,campo.dataset.tipo);
+ if(novo!==original)window.changeValue(campo.dataset.id,novo);
+});
+function openModal(x){editId=x?.id||null;modalTitle.textContent=editId?'Editar lançamento':'Adicionar lançamento';desc.value=x?.desc||'';type.value=x?.type||'Despesa';value.value=x?.value??'';date.value=x?.date||`${monthKey(current)}-01`;status.value=x?.status||'NAO_PAGO';recurring.value=String(x?.recurring||false);notes.value=x?.notes||'';byId('type').querySelector('option[value="Planejar um gasto"]').disabled=!!editId;ultimaSimulacao=null;atualizarSimulacao();ajustarModoPlanejamento();modal.classList.add('show');desc.focus()}
 window.edit=id=>{const item=data.find(x=>x.id===id);if(item)openModal(item)};
 window.changeValue=async(id,val)=>{const item=data.find(x=>x.id===id),v=Number(val);if(!item||!Number.isFinite(v)||v<0||v===item.value)return;if(!canWrite()){render();return}try{await updateDoc(record(id),{value:v})}catch(e){showError(e);render()}};
 window.changeStatus=async(id,val)=>{if(!canWrite()){render();return}try{await updateDoc(record(id),{status:val})}catch(e){showError(e);render()}};
 window.removeItem=async id=>{if(!canWrite()||!confirm('Remover este lançamento?'))return;try{await deleteDoc(record(id))}catch(e){showError(e)}};
-addBtn.onclick=()=>openModal();cancel.onclick=()=>modal.classList.remove('show');
+function fecharModal(){modal.classList.remove('show');addBtn.focus()}
+addBtn.onclick=()=>openModal();cancel.onclick=fecharModal;
+modal.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();fecharModal()}});
 function ajustarModoPlanejamento(){
  const simular=type.value==='Planejar um gasto';
- byId('salvarOuSimular').textContent=simular?'Verificar saldo':'Salvar lançamento';
+ byId('salvarOuSimular').hidden=simular;
+ byId('salvarOuSimular').textContent='Salvar lançamento';
  status.disabled=simular;recurring.disabled=simular;
+ status.closest('.field').hidden=simular;recurring.closest('.field').hidden=simular;notes.closest('.field').hidden=simular;
+ byId('planejamentoNota').hidden=!simular;
+ byId('salvarPlano').hidden=!simular;
  ultimaSimulacao=null;atualizarSimulacao();
 }
 type.addEventListener('change',ajustarModoPlanejamento);
 [desc,value,date].forEach(el=>el.addEventListener('input',()=>{ultimaSimulacao=null;atualizarSimulacao()}));
 form.onsubmit=async e=>{e.preventDefault();
  if(type.value==='Planejar um gasto'){
-   const numero=Number(value.value);
-   if(!desc.value.trim() || !Number.isFinite(numero) || numero<=0 || numero>1e10 || !date.value){alert('Informe descrição, data e valor válido maior que zero.');return}
-   ultimaSimulacao={descricao:desc.value.trim(),valor:Math.round(numero*100),mes:date.value.slice(0,7)};
-   atualizarSimulacao();return;
+   byId('salvarPlano').click();return;
  }
- if(!canWrite())return;const d={id:editId||crypto.randomUUID(),desc:desc.value.trim(),type:type.value,value:+value.value,date:date.value,status:type.value==='Receita'?'NA':status.value,recurring:recurring.value==='true',notes:notes.value,month:date.value.slice(0,7)};if(!d.desc){alert('Informe a descrição.');return}const submit=form.querySelector('[type=submit],button:not([type])');submit.disabled=true;try{if(editId){const {id,...fields}=d;await updateDoc(record(d.id),fields)}else{await setDoc(record(d.id),d)}modal.classList.remove('show')}catch(e){showError(e)}finally{submit.disabled=false}};
+ if(!canWrite())return;const d={id:editId||crypto.randomUUID(),desc:desc.value.trim(),type:type.value,value:+value.value,date:date.value,status:type.value==='Receita'?'NA':status.value,recurring:recurring.value==='true',notes:notes.value,month:date.value.slice(0,7)};if(!d.desc){alert('Informe a descrição.');return}const submit=form.querySelector('[type=submit],button:not([type])');submit.disabled=true;try{if(editId){const {id,...fields}=d;await updateDoc(record(d.id),fields)}else{await setDoc(record(d.id),d)}fecharModal()}catch(e){showError(e)}finally{submit.disabled=false}};
+
+function renderPlanejados(){
+ const lista=byId('listaPlanejados'), mes=monthKey(current);
+ const itens=planos.filter(x=>x.month===mes).sort((a,b)=>a.date.localeCompare(b.date));
+ lista.replaceChildren();
+ if(!itens.length){
+  const vazio=document.createElement('li');vazio.className='empty';vazio.textContent='Nenhum gasto planejado neste mês.';lista.append(vazio);return;
+ }
+ const saldo=data.filter(x=>x.month===mes).reduce((acc,x)=>acc+(x.type==='Receita'?1:-1)*Math.round((Number(x.value)||0)*100),0);
+ itens.forEach(x=>{
+  const linha=document.createElement('li');linha.className='plano-item';
+  const info=document.createElement('div');info.className='plano-info';
+  const nome=document.createElement('strong');nome.textContent=x.desc;
+  const detalhes=document.createElement('span');detalhes.className='plano-detalhe';
+  const apos=saldo-Math.round((Number(x.value)||0)*100);
+  detalhes.setAttribute('aria-live','polite');
+  const mostrarResultado=()=>{
+   detalhes.textContent=!planosVerificados.has(x.id) ? `${fmtDate(x.date)} · Use Verificar saldo para consultar a simulação.` :
+    (!ready || !navigator.onLine) ? `${fmtDate(x.date)} · Saldo indisponível: aguarde a conexão e a atualização dos dados.` :
+    `${fmtDate(x.date)} · ${apos>=0?'Saldo projetado suficiente':'Saldo projetado insuficiente'} · Após este gasto: ${brl(apos/100)}`;
+  };
+  mostrarResultado();
+  info.append(nome,detalhes);
+  const acoes=document.createElement('div');acoes.className='plano-acoes';
+  const valor=document.createElement('strong');valor.textContent=brl(Number(x.value)||0);
+  const verificar=document.createElement('button');verificar.type='button';verificar.className='btn-light';
+  verificar.textContent='Verificar saldo';verificar.setAttribute('aria-label','Verificar saldo para '+x.desc);
+  verificar.addEventListener('click',()=>{planosVerificados.add(x.id);mostrarResultado()});
+  const excluir=document.createElement('button');excluir.type='button';excluir.className='btn-danger';excluir.textContent='Excluir';excluir.setAttribute('aria-label','Excluir planejamento '+x.desc);
+  excluir.addEventListener('click',async()=>{if(!canWrite()||!confirm('Excluir este gasto planejado?'))return;excluir.disabled=true;try{await deleteDoc(record(x.id))}catch(e){showError(e);excluir.disabled=false}});
+  acoes.append(valor,verificar,excluir);linha.append(info,acoes);lista.append(linha);
+ });
+}
+byId('salvarPlano').addEventListener('click',async()=>{
+ const numero=Number(value.value);
+ if(!desc.value.trim()||!Number.isFinite(numero)||numero<=0||numero>1e10||!date.value||!date.checkValidity()){alert('Informe descrição, data e valor válido maior que zero.');return}
+ if(!canWrite())return;
+ const botao=byId('salvarPlano');botao.disabled=true;
+ const item={id:crypto.randomUUID(),desc:desc.value.trim(),type:'Planejar um gasto',value:numero,date:date.value,status:'NA',recurring:false,notes:'',month:date.value.slice(0,7)};
+ try{await setDoc(record(item.id),item);fecharModal()}catch(e){showError(e)}finally{botao.disabled=false}
+});
+
+
+// A ordem das seções é guardada apenas neste navegador, sem alterar o Firebase.
+function iniciarOrdenacaoSecoes(){
+ if(byId('secoesOrdenaveis')) return;
+ const resumo=byId('cartoesResumo');
+ const calendario=byId('calendarioContas');
+ const planejados=document.querySelector('#mainApp .planejados');
+ const lancamentos=byId('rows')?.closest('section');
+ const graficos=byId('areaGraficos');
+ const alternar=byId('alternarGraficos');
+ if(!resumo || !calendario || !planejados || !lancamentos || !graficos || !alternar) return;
+ const area=document.createElement('div');
+ area.id='secoesOrdenaveis';
+ resumo.after(area);
+ const secoes=[
+  {id:'calendario',nome:'Calendário',nodes:[calendario]},
+  {id:'planejados',nome:'Gastos planejados',nodes:[planejados]},
+  {id:'lancamentos',nome:'Lançamentos do mês',nodes:[lancamentos]},
+  {id:'graficos',nome:'Gráficos',nodes:[alternar,graficos]}
+ ];
+ const chave='ordem_secoes_financeiras_v1';
+ const anunciar=document.createElement('span');
+ anunciar.className='secao-anuncio';
+ anunciar.setAttribute('aria-live','polite');
+ area.before(anunciar);
+ let origem=null;
+ const salvar=()=>{try{localStorage.setItem(chave,JSON.stringify([...area.children].map(el=>el.dataset.secao)))}catch(e){console.warn('Não foi possível salvar a ordem das seções.',e)}};
+ const atualizar=()=>{const lista=[...area.children];lista.forEach((el,i)=>{
+  el.querySelector('[data-direcao="anterior"]').disabled=i===0;
+  el.querySelector('[data-direcao="proxima"]').disabled=i===lista.length-1;
+ })};
+ const mover=(el,direcao)=>{const lista=[...area.children],i=lista.indexOf(el),j=i+direcao;
+  if(j<0||j>=lista.length)return;
+  if(direcao<0)area.insertBefore(el,lista[j]);else area.insertBefore(el,lista[j].nextSibling);
+  salvar();atualizar();anunciar.textContent=el.dataset.nome+' movido para a posição '+(j+1)+' de '+lista.length+'.';
+ };
+ secoes.forEach(({id,nome,nodes})=>{
+  const bloco=document.createElement('section');bloco.className='secao-movivel';
+  bloco.dataset.secao=id;bloco.dataset.nome=nome;bloco.setAttribute('aria-label',nome);
+  const barra=document.createElement('div');barra.className='secao-ordenar';
+  const alca=document.createElement('span');alca.className='secao-alca';alca.draggable=true;
+  alca.textContent='↕ '+nome;alca.title='Arraste para reorganizar esta seção';
+  const anterior=document.createElement('button');anterior.type='button';anterior.className='btn-light';anterior.dataset.direcao='anterior';anterior.textContent='↑';anterior.setAttribute('aria-label','Mover '+nome+' para cima');
+  const proximo=document.createElement('button');proximo.type='button';proximo.className='btn-light';proximo.dataset.direcao='proxima';proximo.textContent='↓';proximo.setAttribute('aria-label','Mover '+nome+' para baixo');
+  anterior.addEventListener('click',()=>mover(bloco,-1));proximo.addEventListener('click',()=>mover(bloco,1));
+  alca.addEventListener('dragstart',e=>{origem=bloco;bloco.classList.add('secao-arrastando');e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',id)});
+  alca.addEventListener('dragend',()=>{bloco.classList.remove('secao-arrastando');origem=null});
+  bloco.addEventListener('dragover',e=>{if(origem && origem!==bloco)e.preventDefault()});
+  bloco.addEventListener('drop',e=>{
+   if(!origem||origem===bloco)return;e.preventDefault();
+   const marcador=document.createComment('posição');
+   area.replaceChild(marcador,origem);area.replaceChild(origem,bloco);area.replaceChild(bloco,marcador);
+   salvar();atualizar();anunciar.textContent='Seções reorganizadas.';
+  });
+  barra.append(alca,anterior,proximo);bloco.append(barra,...nodes);area.append(bloco);
+ });
+ try{
+  const ordem=JSON.parse(localStorage.getItem(chave));
+  if(Array.isArray(ordem)&&ordem.length===secoes.length&&new Set(ordem).size===secoes.length&&ordem.every(id=>secoes.some(s=>s.id===id)))
+   ordem.forEach(id=>area.append([...area.children].find(el=>el.dataset.secao===id)));
+ }catch(e){console.warn('Não foi possível restaurar a ordem das seções.',e)}
+ atualizar();
+}
+
 prev.onclick=()=>{current.setMonth(current.getMonth()-1);render()};next.onclick=()=>{current.setMonth(current.getMonth()+1);render()};search.oninput=render;typeFilter.onchange=render;document.getElementById('statusFilter').onchange=render;
 replicate.onclick=async()=>{if(!canWrite())return;const target=monthKey(current), prevD=new Date(current);prevD.setMonth(prevD.getMonth()-1);const source=monthKey(prevD), existing=new Set(data.filter(x=>x.month===target).map(x=>x.desc+'|'+x.value));const copies=[];data.filter(x=>x.month===source&&x.recurring).forEach(x=>{const k=x.desc+'|'+x.value;if(!existing.has(k)){const day=Math.min(Number(x.date.slice(8,10)),new Date(current.getFullYear(),current.getMonth()+1,0).getDate());copies.push({...x,id:crypto.randomUUID(),date:`${target}-${pad(day)}`,month:target,status:x.type==='Receita'?'NA':'NAO_PAGO'});existing.add(k)}});if(!copies.length){alert('Nenhum lançamento novo para replicar.');return}if(copies.length>450){alert('Há lançamentos demais para replicar de uma vez.');return}replicate.disabled=true;try{const batch=writeBatch(db);copies.forEach(x=>batch.set(record(x.id),x));await batch.commit();alert(`${copies.length} lançamento(s) recorrente(s) replicado(s).`)}catch(e){showError(e)}finally{replicate.disabled=false}};
 byId('loginForm').onsubmit=async e=>{e.preventDefault();byId('loginBtn').disabled=true;byId('authMessage').textContent='Entrando...';try{await signInWithEmailAndPassword(auth,byId('email').value,byId('password').value);byId('password').value='';byId('authMessage').textContent=''}catch(err){console.error(err);byId('authMessage').textContent='Não foi possível entrar. Confira o e-mail, a senha e a configuração do Firebase.'}finally{byId('loginBtn').disabled=false}};
 byId('logoutBtn').onclick=async()=>{if(!confirm('Sair da conta neste dispositivo?'))return;try{await signOut(auth)}catch(e){showError(e)}};
-onAuthStateChanged(auth,u=>{if(unsubscribe){unsubscribe();unsubscribe=null}ready=false;data=[];user=u;modal.classList.remove('show');byId('authPanel').hidden=!!u;byId('mainApp').hidden=!u;if(!u){ultimaSimulacao=null;byId('simuladorResultado').hidden=true;return;}byId('userEmail').textContent=u.email||'Conta conectada';setStatus('Carregando lançamentos...');render();unsubscribe=onSnapshot(records(),{includeMetadataChanges:true},snap=>{data=snap.docs.map(d=>({...d.data(),id:d.id}));ready=!snap.metadata.fromCache;const pending=snap.metadata.hasPendingWrites;setStatus(pending?'Salvando alterações...':snap.metadata.fromCache?'Sem conexão: exibindo dados temporários. Não feche a página se houver alterações pendentes.':'Sincronizado',snap.metadata.fromCache);render()},e=>{ready=false;showError(e)})});
-window.addEventListener('offline',()=>{ready=false;setStatus('Sem conexão. Aguarde reconectar antes de alterar dados.',true);atualizarSimulacao()});
+onAuthStateChanged(auth,u=>{if(unsubscribe){unsubscribe();unsubscribe=null}ready=false;data=[];planos=[];planosVerificados.clear();user=u;modal.classList.remove('show');byId('authPanel').hidden=!!u;byId('mainApp').hidden=!u;if(!u){ultimaSimulacao=null;byId('simuladorResultado').hidden=true;return;}byId('userEmail').textContent=u.email||'Conta conectada';setStatus('Carregando lançamentos...');render();unsubscribe=onSnapshot(records(),{includeMetadataChanges:true},snap=>{const todos=snap.docs.map(d=>({...d.data(),id:d.id}));planos=todos.filter(x=>x.type==='Planejar um gasto');data=todos.filter(x=>x.type!=='Planejar um gasto');ready=!snap.metadata.fromCache;const pending=snap.metadata.hasPendingWrites;setStatus(pending?'Salvando alterações...':snap.metadata.fromCache?'Sem conexão: exibindo dados temporários. Não feche a página se houver alterações pendentes.':'Sincronizado',snap.metadata.fromCache);render()},e=>{ready=false;showError(e)})});
+window.addEventListener('offline',()=>{ready=false;setStatus('Sem conexão. Aguarde reconectar antes de alterar dados.',true);atualizarSimulacao();renderPlanejados()});
 window.addEventListener('online',()=>setStatus('Reconectando...'));
 byId('exportBtn').onclick=async()=>{if(!canWrite())return;try{const snapshot=await getDocsFromServer(records());const out=snapshot.docs.map(d=>({...d.data(),id:d.id}));const url=URL.createObjectURL(new Blob([JSON.stringify(out,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='backup_financeiro.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}catch(e){showError(e)}};
 byId('importBtn').onclick=()=>{if(canWrite())byId('importFile').click()};
-byId('importFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const arr=JSON.parse(await file.text());if(!Array.isArray(arr)||arr.length>450)throw Error('O arquivo precisa conter uma lista com até 450 lançamentos.');const allowed=['Receita','Despesa','Lazer','Cartão de Crédito'];const cleaned=arr.map(x=>{if(!x||typeof x.desc!=='string'||!x.desc.trim()||!allowed.includes(x.type)||!Number.isFinite(Number(x.value))||Number(x.value)<0||!/^\d{4}-\d{2}-\d{2}$/.test(x.date)||!['PAGO','NAO_PAGO','NA'].includes(x.status))throw Error('Arquivo inválido: verifique os dados.');const parsed=new Date(x.date+'T12:00:00');if(!Number.isFinite(parsed.getTime())||`${parsed.getFullYear()}-${pad(parsed.getMonth()+1)}-${pad(parsed.getDate())}`!==x.date)throw Error('Arquivo contém data inválida.');return {id:crypto.randomUUID(),desc:x.desc,type:x.type,value:Number(x.value),date:x.date,status:x.status,recurring:x.recurring===true,notes:typeof x.notes==='string'?x.notes:'',month:x.date.slice(0,7)}});if(!cleaned.length){alert('Arquivo sem lançamentos.');return}if(!confirm(`Importar ${cleaned.length} lançamento(s) como novos? Eles serão adicionados aos existentes e importar duas vezes cria duplicatas.`))return;const batch=writeBatch(db);cleaned.forEach(x=>batch.set(record(x.id),x));await batch.commit();alert(`${cleaned.length} lançamento(s) importado(s).`)}catch(err){console.error(err);alert('Importação não concluída: '+(err.message||'erro de conexão'))}finally{e.target.value=''}};
+byId('importFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{const arr=JSON.parse(await file.text());if(!Array.isArray(arr)||arr.length>450)throw Error('O arquivo precisa conter uma lista com até 450 lançamentos.');const allowed=['Receita','Despesa','Lazer','Cartão de Crédito','Planejar um gasto'];const cleaned=arr.map(x=>{if(!x||typeof x.desc!=='string'||!x.desc.trim()||!allowed.includes(x.type)||!Number.isFinite(Number(x.value))||Number(x.value)<0||!/^\d{4}-\d{2}-\d{2}$/.test(x.date)||!['PAGO','NAO_PAGO','NA'].includes(x.status))throw Error('Arquivo inválido: verifique os dados.');const parsed=new Date(x.date+'T12:00:00');if(!Number.isFinite(parsed.getTime())||`${parsed.getFullYear()}-${pad(parsed.getMonth()+1)}-${pad(parsed.getDate())}`!==x.date)throw Error('Arquivo contém data inválida.');return {id:crypto.randomUUID(),desc:x.desc,type:x.type,value:Number(x.value),date:x.date,status:x.status,recurring:x.recurring===true,notes:typeof x.notes==='string'?x.notes:'',month:x.date.slice(0,7)}});if(!cleaned.length){alert('Arquivo sem lançamentos.');return}if(!confirm(`Importar ${cleaned.length} lançamento(s) como novos? Eles serão adicionados aos existentes e importar duas vezes cria duplicatas.`))return;const batch=writeBatch(db);cleaned.forEach(x=>batch.set(record(x.id),x));await batch.commit();alert(`${cleaned.length} lançamento(s) importado(s).`)}catch(err){console.error(err);alert('Importação não concluída: '+(err.message||'erro de conexão'))}finally{e.target.value=''}};
 </script>
 <script src="./tema.js" defer></script>
 </body></html>

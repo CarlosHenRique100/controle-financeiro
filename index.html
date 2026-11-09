@@ -353,6 +353,36 @@ body{background:var(--bg);color:var(--text)}
 }
 @media(prefers-reduced-motion:reduce){#mainApp #calendarioContas .calendario-dia{transition:none}}
 
+
+/* Gastos planejados: mesma organização da lista de lançamentos. */
+#mainApp .planejados .plano-resultado{color:var(--muted);font-size:13px;line-height:1.4;min-width:170px}
+#mainApp .planejados .plano-acoes{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#mainApp .planejados .plano-valor{font-weight:700;color:#98483f;white-space:nowrap;font-variant-numeric:tabular-nums}
+#mainApp .planejados .plano-nota{padding:14px 20px;margin:0}
+@media(max-width:700px){
+ #mainApp .planejados .table-wrap{overflow:visible;padding:12px}
+ #mainApp .planejados table{min-width:0;display:block}
+ #mainApp .planejados thead{display:none}
+ #mainApp .planejados tbody{display:grid;gap:10px}
+ #mainApp .planejados tbody tr{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:11px;overflow:hidden}
+ #mainApp .planejados tbody td{display:block;min-width:0;padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+ #mainApp .planejados tbody td::before{content:attr(data-label);display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:5px}
+ #mainApp .planejados tbody td.plano-largo{grid-column:1/-1}
+ #mainApp .planejados tbody td:last-child{border-bottom:0}
+ #mainApp .planejados tbody td.empty{grid-column:1/-1;text-align:center}
+ #mainApp .planejados tbody td.empty::before{display:none}
+}
+
+
+/* Organização das seções. */
+#secoesOrdenaveis{display:flex;flex-wrap:wrap;gap:18px;align-items:stretch}
+#secoesOrdenaveis .secao-movivel{position:relative;display:flex;flex-direction:column;flex:0 0 100%;width:100%;margin:0;min-width:0}
+#secoesOrdenaveis .secao-movivel > .panel,
+#secoesOrdenaveis .secao-movivel > #calendarioContas{flex:1;min-width:0}
+#secoesOrdenaveis .secao-movivel .panel-head{flex-wrap:wrap}
+#secoesOrdenaveis .secao-movivel .table-wrap{max-width:100%;overflow-x:auto}
+#secoesOrdenaveis .secao-ordenar{padding-right:12px}
+
 </style>
 </head>
 <body>
@@ -380,7 +410,10 @@ body{background:var(--bg);color:var(--text)}
   </div>
   <section class="panel planejados" aria-labelledby="planejadosTitulo">
     <div class="panel-head"><h2 id="planejadosTitulo">Gastos planejados</h2></div>
-    <ul class="lista-planejados" id="listaPlanejados"></ul>
+    <div class="table-wrap"><table aria-label="Gastos planejados">
+      <thead><tr><th>Item/Descrição</th><th>Tipo</th><th class="right">Valor</th><th>Data</th><th>Resultado da verificação</th><th>Ações</th></tr></thead>
+      <tbody id="listaPlanejados"></tbody>
+    </table></div>
     <p class="plano-nota">A verificação é individual e considera o mês inteiro, inclusive receitas e despesas futuras ou pendentes. Não soma os outros planejamentos nem garante saldo na data escolhida.</p>
   </section>
   <section class="panel">
@@ -578,31 +611,33 @@ function renderPlanejados(){
  const itens=planos.filter(x=>x.month===mes).sort((a,b)=>a.date.localeCompare(b.date));
  lista.replaceChildren();
  if(!itens.length){
-  const vazio=document.createElement('li');vazio.className='empty';vazio.textContent='Nenhum gasto planejado neste mês.';lista.append(vazio);return;
+  const linha=document.createElement('tr'), vazio=document.createElement('td');
+  vazio.className='empty';vazio.colSpan=6;vazio.textContent='Nenhum gasto planejado neste mês.';
+  linha.append(vazio);lista.append(linha);return;
  }
  const saldo=data.filter(x=>x.month===mes).reduce((acc,x)=>acc+(x.type==='Receita'?1:-1)*Math.round((Number(x.value)||0)*100),0);
  itens.forEach(x=>{
-  const linha=document.createElement('li');linha.className='plano-item';
-  const info=document.createElement('div');info.className='plano-info';
-  const nome=document.createElement('strong');nome.textContent=x.desc;
-  const detalhes=document.createElement('span');detalhes.className='plano-detalhe';
+  const linha=document.createElement('tr');
+  const celula=(label, larga=false)=>{const td=document.createElement('td');td.dataset.label=label;if(larga)td.classList.add('plano-largo');linha.append(td);return td};
+  const nome=celula('Item/Descrição',true), titulo=document.createElement('strong');titulo.textContent=x.desc;nome.append(titulo);
+  const tipo=celula('Tipo'), etiqueta=document.createElement('span');etiqueta.className='pill despesa';etiqueta.textContent='Planejado';tipo.append(etiqueta);
+  const valor=celula('Valor');valor.classList.add('right','plano-valor');valor.textContent=brl(Number(x.value)||0);
+  celula('Data').textContent=fmtDate(x.date);
+  const detalhes=celula('Resultado da verificação',true);detalhes.classList.add('plano-resultado');detalhes.setAttribute('aria-live','polite');
   const apos=saldo-Math.round((Number(x.value)||0)*100);
-  detalhes.setAttribute('aria-live','polite');
   const mostrarResultado=()=>{
-   detalhes.textContent=!planosVerificados.has(x.id) ? `${fmtDate(x.date)} · Use Verificar saldo para consultar a simulação.` :
-    (!ready || !navigator.onLine) ? `${fmtDate(x.date)} · Saldo indisponível: aguarde a conexão e a atualização dos dados.` :
-    `${fmtDate(x.date)} · ${apos>=0?'Saldo projetado suficiente':'Saldo projetado insuficiente'} · Após este gasto: ${brl(apos/100)}`;
+   detalhes.textContent=!planosVerificados.has(x.id) ? 'Use Verificar saldo para consultar a simulação.' :
+    (!ready || !navigator.onLine) ? 'Saldo indisponível: aguarde a conexão e a atualização dos dados.' :
+    `${apos>=0?'Saldo projetado suficiente':'Saldo projetado insuficiente'} · Após este gasto: ${brl(apos/100)}`;
   };
   mostrarResultado();
-  info.append(nome,detalhes);
-  const acoes=document.createElement('div');acoes.className='plano-acoes';
-  const valor=document.createElement('strong');valor.textContent=brl(Number(x.value)||0);
+  const acoes=celula('Ações',true), grupo=document.createElement('div');grupo.className='plano-acoes';
   const verificar=document.createElement('button');verificar.type='button';verificar.className='btn-light';
   verificar.textContent='Verificar saldo';verificar.setAttribute('aria-label','Verificar saldo para '+x.desc);
   verificar.addEventListener('click',()=>{planosVerificados.add(x.id);mostrarResultado()});
   const excluir=document.createElement('button');excluir.type='button';excluir.className='btn-danger';excluir.textContent='Excluir';excluir.setAttribute('aria-label','Excluir planejamento '+x.desc);
   excluir.addEventListener('click',async()=>{if(!canWrite()||!confirm('Excluir este gasto planejado?'))return;excluir.disabled=true;try{await deleteDoc(record(x.id))}catch(e){showError(e);excluir.disabled=false}});
-  acoes.append(valor,verificar,excluir);linha.append(info,acoes);lista.append(linha);
+  grupo.append(verificar,excluir);acoes.append(grupo);lista.append(linha);
  });
 }
 byId('salvarPlano').addEventListener('click',async()=>{
@@ -615,7 +650,7 @@ byId('salvarPlano').addEventListener('click',async()=>{
 });
 
 
-// A ordem das seções é guardada apenas neste navegador, sem alterar o Firebase.
+// A ordem das seções é guardada apenas neste navegador.
 function iniciarOrdenacaoSecoes(){
  if(byId('secoesOrdenaveis')) return;
  const resumo=byId('cartoesResumo');
@@ -625,9 +660,7 @@ function iniciarOrdenacaoSecoes(){
  const graficos=byId('areaGraficos');
  const alternar=byId('alternarGraficos');
  if(!resumo || !calendario || !planejados || !lancamentos || !graficos || !alternar) return;
- const area=document.createElement('div');
- area.id='secoesOrdenaveis';
- resumo.after(area);
+ const area=document.createElement('div');area.id='secoesOrdenaveis';resumo.after(area);
  const secoes=[
   {id:'calendario',nome:'Calendário',nodes:[calendario]},
   {id:'planejados',nome:'Gastos planejados',nodes:[planejados]},
@@ -635,12 +668,11 @@ function iniciarOrdenacaoSecoes(){
   {id:'graficos',nome:'Gráficos',nodes:[alternar,graficos]}
  ];
  const chave='ordem_secoes_financeiras_v1';
- const anunciar=document.createElement('span');
- anunciar.className='secao-anuncio';
- anunciar.setAttribute('aria-live','polite');
- area.before(anunciar);
- let origem=null;
- const salvar=()=>{try{localStorage.setItem(chave,JSON.stringify([...area.children].map(el=>el.dataset.secao)))}catch(e){console.warn('Não foi possível salvar a ordem das seções.',e)}};
+ const anunciar=document.createElement('span');anunciar.className='secao-anuncio';
+ anunciar.setAttribute('aria-live','polite');area.before(anunciar);
+ const salvar=()=>{try{
+  localStorage.setItem(chave,JSON.stringify([...area.children].map(el=>el.dataset.secao)));
+ }catch(e){console.warn('Não foi possível salvar a disposição das seções.',e)}};
  const atualizar=()=>{const lista=[...area.children];lista.forEach((el,i)=>{
   el.querySelector('[data-direcao="anterior"]').disabled=i===0;
   el.querySelector('[data-direcao="proxima"]').disabled=i===lista.length-1;
@@ -654,27 +686,17 @@ function iniciarOrdenacaoSecoes(){
   const bloco=document.createElement('section');bloco.className='secao-movivel';
   bloco.dataset.secao=id;bloco.dataset.nome=nome;bloco.setAttribute('aria-label',nome);
   const barra=document.createElement('div');barra.className='secao-ordenar';
-  const alca=document.createElement('span');alca.className='secao-alca';alca.draggable=true;
-  alca.textContent='↕ '+nome;alca.title='Arraste para reorganizar esta seção';
   const anterior=document.createElement('button');anterior.type='button';anterior.className='btn-light';anterior.dataset.direcao='anterior';anterior.textContent='↑';anterior.setAttribute('aria-label','Mover '+nome+' para cima');
   const proximo=document.createElement('button');proximo.type='button';proximo.className='btn-light';proximo.dataset.direcao='proxima';proximo.textContent='↓';proximo.setAttribute('aria-label','Mover '+nome+' para baixo');
   anterior.addEventListener('click',()=>mover(bloco,-1));proximo.addEventListener('click',()=>mover(bloco,1));
-  alca.addEventListener('dragstart',e=>{origem=bloco;bloco.classList.add('secao-arrastando');e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',id)});
-  alca.addEventListener('dragend',()=>{bloco.classList.remove('secao-arrastando');origem=null});
-  bloco.addEventListener('dragover',e=>{if(origem && origem!==bloco)e.preventDefault()});
-  bloco.addEventListener('drop',e=>{
-   if(!origem||origem===bloco)return;e.preventDefault();
-   const marcador=document.createComment('posição');
-   area.replaceChild(marcador,origem);area.replaceChild(origem,bloco);area.replaceChild(bloco,marcador);
-   salvar();atualizar();anunciar.textContent='Seções reorganizadas.';
-  });
-  barra.append(alca,anterior,proximo);bloco.append(barra,...nodes);area.append(bloco);
+  barra.append(anterior,proximo);bloco.append(barra,...nodes);
+  area.append(bloco);
  });
  try{
   const ordem=JSON.parse(localStorage.getItem(chave));
   if(Array.isArray(ordem)&&ordem.length===secoes.length&&new Set(ordem).size===secoes.length&&ordem.every(id=>secoes.some(s=>s.id===id)))
    ordem.forEach(id=>area.append([...area.children].find(el=>el.dataset.secao===id)));
- }catch(e){console.warn('Não foi possível restaurar a ordem das seções.',e)}
+ }catch(e){console.warn('Não foi possível restaurar a disposição das seções.',e)}
  atualizar();
 }
 
